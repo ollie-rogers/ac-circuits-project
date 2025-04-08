@@ -81,9 +81,13 @@ void Circuit::add_parallel(const std::unique_ptr<Component>& component)
 
 void Circuit::print_data() const
 {
-  std::cout << "Circuit Impedane: " 
+  print_vspace();
+  std::cout << "CIRCUIT DATA:"
+            << "Impedane: " 
             << impedance.real() << " + " 
-            << impedance.imag() << "i" << std::endl;
+            << impedance.imag() << "i" 
+            << "\nMemory Location: " << this << std::endl;
+
 }
 
 

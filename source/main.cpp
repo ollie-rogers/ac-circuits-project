@@ -125,7 +125,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 
       input_iterator = input_validity(series_or_parallel); // checks to see if valid input
 
-    } // break if valid input
+    } // breaks if valid input
 
     if(series_or_parallel == "s") // if user chose to add in series
     {
@@ -135,7 +135,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
     {
       circuit->add_parallel(component); // use add_parallel to modify circuit
     }
-    
+
   }
 }
 
@@ -148,12 +148,14 @@ int main() {
   read_components(FILE_NAME, components); // read components from file, add to vector
   print_components_vector(components); // print the contents of the vector
 
-  std::unique_ptr<Circuit> circuit;
-  
-  print_dash();
+  print_dash(); // space for readability
+  std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
+
   create_circuit(circuit, components);
 
   circuit->print_data();
+
+  print_dash();
 
   return 0;
 
