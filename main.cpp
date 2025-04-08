@@ -1,9 +1,9 @@
-#include "utils.h"
-#include "component.h"
-#include "circuit.h"
-#include "resistor.h"
-#include "capacitor.h"
-#include "inductor.h"
+#include "headers/utils.h"
+#include "headers/component.h"
+#include "headers/circuit.h"
+#include "derived_classes/resistor.h"
+#include "derived_classes/inductor.h"
+#include "derived_classes/capacitor.h"
 
 #include <iostream>
 #include <string>

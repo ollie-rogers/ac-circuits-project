@@ -1,8 +1,7 @@
 #ifndef RESISTOR_H
 #define RESISTOR_H
 
-#include "utils.h"
-#include "Component.h"
+#include "../headers/component.h"
 
 #include <vector>
 #include <memory>

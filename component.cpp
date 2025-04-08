@@ -1,5 +1,5 @@
-#include "component.h"
-#include "utils.h"
+#include "headers/component.h"
+#include "headers/utils.h"
 
 #include <iostream>
 
