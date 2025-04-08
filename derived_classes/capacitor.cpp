@@ -21,7 +21,7 @@ Capacitor::Capacitor(std::string r_name, double r_frequency, double capacitance)
   : Component(r_name, r_frequency), capacitance(capacitance)
   {
     print_vspace(); // space for readability
-    std::cout << "Calling Resistor Constructor\nConstructing: " 
+    std::cout << "Calling Capacitor Constructor\nConstructing: " 
               << get_name() << std::endl; // call message
   }
 
