@@ -12,37 +12,41 @@
 #include <fstream>
 
 
-std::string FILE_NAME = "input_components.csv";
+std::string FILE_NAME = "input_components.csv"; // defining the input file name
 
 
 void read_components(const std::string& filename, std::vector<std::unique_ptr<Component>>& components)
 {  
-  std::ifstream file(filename);
-  std::string line;
+  /* Parameters: 
+   - components (vector of smart pointers to components)
+   - filename (string) (kept abitrary so can use for different files)
+  Aims:
+   - reads file line by line
+   - determines which component each line is
+   - adds a smart pointer to that component to vector */
+  
+  std::ifstream file(filename); // opening the file
+  std::string line; // defining a string which holds each line whilst reading
 
-  // Don't include the first line (skip it)
-  std::getline(file, line);
+  while (std::getline(file, line)) { // Whilst lines remain
 
-  while (std::getline(file, line)) { // Read the rest of the lines
-
-      std::stringstream ss(line);
-      std::string type, name;
+      std::stringstream ss(line); // make stringstream of current line
+      std::string type, name; // deinfing variables to store type, name, frequency and value (e.g. resistance)
       double value, frequency;
 
-      // Read values from the stream
-      std::getline(ss, type, ',');
-      std::getline(ss, name, ',');
-      ss >> value;
+      std::getline(ss, type, ','); // read up to first comma, this is type
+      std::getline(ss, name, ','); // read up to nect comma, this is name
+      ss >> value; // extract the numeric value, this is value
       ss.ignore(1, ',');  // Skip the comma after value
-      ss >> frequency;
+      ss >> frequency; // so all thats left is frequency
 
-      // Create the corresponding component object
-      if (type == "Resistor") {
-          components.push_back(std::make_unique<Resistor>(name, value, frequency));
+      // Create smart pointers and add to vector
+      if (type == "Resistor") { 
+          components.push_back(std::make_unique<Resistor>(name, value, frequency)); // add resistor
       } else if (type == "Capacitor") {
-          components.push_back(std::make_unique<Capacitor>(name, value, frequency));
+          components.push_back(std::make_unique<Capacitor>(name, value, frequency)); // add capacitor
       } else if (type == "Inductor") {
-          components.push_back(std::make_unique<Inductor>(name, value, frequency));
+          components.push_back(std::make_unique<Inductor>(name, value, frequency)); // add inductor
       }
   }
 
@@ -51,6 +55,11 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
 
 void print_components_vector(const std::vector<std::unique_ptr<Component>>& components)
 {
+  /* Parameters:
+   - vector of smart pointers to components (passed by ref) 
+   Aims:
+   - to iterate through the vector
+   - use the print data functions to print each component*/
   for (const std::unique_ptr<Component>& component : components) {
     component->print_data();
   }
@@ -62,8 +71,8 @@ int main() {
   /* Create a vector of smart pointers to arbitrary components */
   std::vector<std::unique_ptr<Component>> components;
 
-  read_components(FILE_NAME, components);
-  print_components_vector(components);
+  read_components(FILE_NAME, components); // read components from file, add to vector
+  print_components_vector(components); // print the contents of the vector
 
   return 0;
 
