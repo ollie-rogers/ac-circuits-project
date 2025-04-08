@@ -14,6 +14,8 @@
 int main() {
 
   Resistor test_resistor("Test Resistor", 4.0, 4.0);
+  test_resistor.print_data();
 
   return 0;
+
 }

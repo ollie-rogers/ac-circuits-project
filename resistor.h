@@ -22,6 +22,8 @@ public:
   Additionally contains resistance (differing from base class) */
   Resistor(std::string r_name, double r_frequency, double resistance); 
 
+  ~Resistor() override; // overriding the base class destructor
+
   void set_frequency() override; // override the setter for frequency
 
   double get_resistance() const; // define new getter for resistance

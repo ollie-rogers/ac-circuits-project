@@ -13,5 +13,5 @@ void print_dash()
 void print_vspace()
 {
 
-  std::cout << "\n" << std::endl;
+  std::cout << "" << std::endl;
 }

@@ -10,8 +10,7 @@ Resistor::Resistor() : Component(), resistance(0.0)
 {
   print_vspace(); // space for readability
   std::cout << "Calling Default Resistor Constructor\nConstructing: " 
-            << get_name() << "with resistance " 
-            << get_resistance() << " Ohms"  << std::endl; // call message
+            << get_name() << std::endl; // call message
 }
 
 
@@ -22,8 +21,7 @@ Resistor::Resistor(std::string r_name, double r_frequency, double resistance)
   {
     print_vspace(); // space for readability
     std::cout << "Calling Resistor Constructor\nConstructing: " 
-              << get_name() << "with resistance " 
-              << get_resistance() << " Ohms" << std::endl; // call message
+              << get_name() << std::endl; // call message
   }
 
 
@@ -64,7 +62,7 @@ std::complex<double> Resistor::get_impedance() const
 {
   /* Impedance for a resistor is just its resistance.
   Function returns the resistance as a complex number*/
-  return ;
+  return std::complex<double>(resistance, 0.0);
 }
 
 
@@ -78,12 +76,18 @@ double Resistor::get_impedance_magnitude() const
 
 double Resistor::get_phase_difference() const
 {
+  /* Impedance is non complex for resistor so always pahse difference of zero. */
   return 0.0;
 }
 
 
 void Resistor::print_data() const
 {
-  print_vspace();
-}
+  print_vspace(); // space for readability
+  std::cout << "COMPONENT DATA:\n"
+            << "Name: " << get_name()
+            << "\nMemroy Location: " << this
+            << "\nResistance: " << get_resistance()
+            << " Ohms"<< std::endl; // call message
+} 
 
