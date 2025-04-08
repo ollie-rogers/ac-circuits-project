@@ -1,29 +1,37 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#include "component.h"
+#include "utils.h"
 
-#include <complex>
-
-
-class Component {
-
-private:
-
-  double frequency; // define the frequency as private
-
-  
-public:
-
-  // defining purely vitrual setter for the frequency
-  virtual void set_frequency(); 
-  
-  /* Defining purely vitrual getter for the frequency, impedance (complex), 
-  the magnitude of the impedance (real) and the phase difference (real).*/
-  virtual double getFrequency() const = 0; // use of const = 0 makes these pure virtual
-  virtual std::complex<double> getImpedance() const = 0;
-  virtual double getMagnitude() const = 0;
-  virtual double getPhaseDifference() const = 0;
-  
-};
+#include <iostream>
 
 
-#endif // COMPONENT_H
+// Default constructor definition
+Component::Component() : frequency(double(0.0))
+    {
+    print_dash();
+    std::cout << "Calling Component Default Constructor\nCalling:" 
+              << get_name() << std::endl; // call message
+}
+
+
+// Parameterized constructor 
+Component::Component(std::string component_name, double component_frequency)
+    : name(std::string(component_name)), frequency(component_frequency) {
+    print_dash();
+    std::cout << "Calling Parameterized Constructor\nCreating: " 
+              << get_name() << std::endl; // call message
+}
+
+
+// Define the base class destructor for cleanup (if any)
+Component::~Component() {
+  std::cout << "Calling Component Destructor\n"
+            << "Destroying: " << get_name() << std::endl;
+  // Any cleanup code for the base class (like freeing resources)
+}
+
+
+std::string Component::get_name() const
+{
+  return name;
+}
+
