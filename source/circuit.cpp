@@ -47,6 +47,11 @@ void Circuit::add_series(const std::unique_ptr<Component>& component)
    Aims:
    - add the component in series with original circuit
    - modify the impedance of the circuit accordingly */
+  
+  print_vspace();
+  std::cout << "Calling Series Adder Function: " 
+            << "\nAdding Component: " << component->get_name() 
+            << std::endl; // call message
 
   // First, use getter to get impedance of added component
   std::complex<double> component_impedance = component->get_impedance(); 
@@ -64,6 +69,11 @@ void Circuit::add_parallel(const std::unique_ptr<Component>& component)
    Aims:
    - Add the component in parallel with original circuit
    - modify the impedance accordingly */
+  
+   print_vspace();
+   std::cout << "Calling Parallel Adder Function: " 
+             << "\nAdding Component: " << component->get_name() 
+             << std::endl; // call message
 
   // Define complex number 1
   std::complex<double> one(1.0, 0.0);
@@ -86,7 +96,7 @@ void Circuit::print_data() const
   std::cout << "CIRCUIT DATA:\n"
             << "Impedance: " 
             << impedance.real() << " + " 
-            << impedance.imag() << "i" 
+            << impedance.imag() << "i Ohms" 
             << "\nMemory Location: " << this << std::endl;
 
 }
