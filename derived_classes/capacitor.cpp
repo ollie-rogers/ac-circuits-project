@@ -64,7 +64,7 @@ std::complex<double> Capacitor::get_impedance() const
 {
   /* Using the standard formula for the impedance of a capacitor
   Purely complex where complex part is -1/(omega*f) */
-  return std::complex<double>(0.0, -1/(capacitance*frequency));
+  return std::complex<double>(0.0, -1/(capacitance*2*PI*frequency));
 }
 
 

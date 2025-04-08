@@ -64,7 +64,7 @@ std::complex<double> Inductor::get_impedance() const
 {
   /* Using the standard formula for the impedance of an inductor
   Purely complex where complex part is omega*L */
-  return std::complex<double>(0.0, frequency*inductance);
+  return std::complex<double>(0.0, 2*PI*frequency*inductance);
 }
 
 

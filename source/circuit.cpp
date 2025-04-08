@@ -15,8 +15,8 @@
 Circuit::Circuit() : impedance(std::complex<double> (0.0, 0.0))
 {
     print_vspace(); // space for readability
-    std::cout << "Calling Default Circuit Constructor - Building Circuit" 
-              <<  std::endl; // call message
+    std::cout << "Calling Default Circuit Constructor\n" 
+              << "Memory Location: " << this << std::endl; // call message
 }
 
 
@@ -34,7 +34,8 @@ Circuit::Circuit(std::complex<double> impedance)
 Circuit::~Circuit() 
 {
   print_vspace(); // space for readability
-  std::cout << "Calling Circuit Destructor\n" << std::endl;
+  std::cout << "Calling Circuit Destructor:\n"
+            << "Destroying" << this << std::endl; // call message
   // INSERT CLEANUP CODE HERE IF NEEDED
 }
 
@@ -82,8 +83,8 @@ void Circuit::add_parallel(const std::unique_ptr<Component>& component)
 void Circuit::print_data() const
 {
   print_vspace();
-  std::cout << "CIRCUIT DATA:"
-            << "Impedane: " 
+  std::cout << "CIRCUIT DATA:\n"
+            << "Impedance: " 
             << impedance.real() << " + " 
             << impedance.imag() << "i" 
             << "\nMemory Location: " << this << std::endl;

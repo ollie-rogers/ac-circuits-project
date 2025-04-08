@@ -27,7 +27,7 @@ Component::Component(std::string component_name, double component_frequency)
 Component::~Component() 
 {
   print_vspace(); // space for readability
-  std::cout << "Calling Component Destructor\n"
+  std::cout << "Calling Component Destructor:\n"
             << "Destroying: " << get_name() << std::endl;
   // INSERT CLEANUP CODE HERE IF NEEDED
 }
