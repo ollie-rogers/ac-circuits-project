@@ -1,12 +1,12 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Iheaders -Iderived_classes
+CXXFLAGS = -std=c++17 -Wall -Isource -Iheaders -Iderived_classes
 
-# Source files in project root and derived_classes
-SRCS = main.cpp \
-       component.cpp \
-       circuit.cpp \
-       utils.cpp \
+# Source files in 'source' and 'derived_classes'
+SRCS = source/main.cpp \
+       source/component.cpp \
+       source/circuit.cpp \
+       source/utils.cpp \
        derived_classes/resistor.cpp \
        derived_classes/inductor.cpp \
        derived_classes/capacitor.cpp
