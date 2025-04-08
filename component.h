@@ -6,7 +6,7 @@
 
 class Component {
 
-private:
+protected:
 
   /* Note: do not need to define impedance, magnitude of impedance or phase differnce
   as data members, as these can be calculated on demand. */
@@ -23,7 +23,7 @@ public:
   virtual ~Component(); // desctructor for base class
 
   // defining purely vitrual setter for the frequency (const = 0 so pure virtual)
-  virtual void set_frequency() const = 0; 
+  virtual void set_frequency() = 0; 
 
   // Default getter for name, this does not need to be overriden in derived classes
   std::string get_name() const;
@@ -34,7 +34,9 @@ public:
   virtual std::complex<double> get_impedance() const = 0;
   virtual double get_magnitude() const = 0;
   virtual double get_phase_difference() const = 0;
-  virtual std::string get_name() const = 0;
+
+  // defining a print data function as purely virtual, such that it must be overriden
+  virtual void print_data() const = 0;
   
 };
 
