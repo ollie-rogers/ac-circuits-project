@@ -41,8 +41,8 @@ void Capacitor::set_frequency(double new_frequency)
 {
   print_vspace();
   std::cout << "Setting new frequency: " 
-            << new_frequency << "Hz" << std::endl;
-  frequency = new_frequency;
+            << new_frequency << "Hz" << std::endl; // call message
+  frequency = new_frequency; // setting new frequency
 }
 
 
