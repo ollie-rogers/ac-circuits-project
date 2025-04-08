@@ -10,6 +10,7 @@
 #include <vector>
 #include <complex>
 #include <fstream>
+#include <memory>
 
 
 std::string FILE_NAME = "input_components.csv"; // defining the input file name
