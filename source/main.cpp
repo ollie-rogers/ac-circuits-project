@@ -16,10 +16,38 @@
 std::string FILE_NAME = "input_components.csv"; // defining the input file name
 
 
+void error_message() {
+    
+  //prints an error message if an input is of the wrong form
+  std::cin.clear();  // clear a failed state
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+  std::cout << "Invalid input. Please try again" << std::endl;
+}
+
+
+bool input_validity(std::string choice) {
+
+  /* Checks whether the choice of whether to print the full list is of the right form.
+  If of the right form returns true.
+  If not of the right form, prints error message and returns false. */
+  if (std::cin.fail() || std::cin.peek() != '\n') {
+      error_message();
+      return false;
+  } else if (choice == "s" || choice == "p") {
+      return true;
+  } else {
+      error_message();
+      return false;
+  }
+
+  return false;
+}
+
+
 void read_components(const std::string& filename, std::vector<std::unique_ptr<Component>>& components)
 {  
   /* Parameters: 
-   - components (vector of smart pointers to components)
+   - components (vector of smart pointers to arbitrary components)
    - filename (string) (kept abitrary so can use for different files)
   Aims:
    - reads file line by line
@@ -57,12 +85,57 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
 void print_components_vector(const std::vector<std::unique_ptr<Component>>& components)
 {
   /* Parameters:
-   - vector of smart pointers to components (passed by ref) 
+   - components (vector of smart pointers to arbitrary components)
    Aims:
    - to iterate through the vector
    - use the print data functions to print each component*/
   for (const std::unique_ptr<Component>& component : components) {
     component->print_data();
+  }
+}
+
+
+void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
+{
+  /* Parameters:
+   - circuit (smart pointer to a circuit object)
+   - components (vector of smart pointers to arbitrary components) 
+   Aims:
+   - Iterate through the vector of components
+   - For each component, ask the user to add in series or parallel 
+   - Uses add_series and add_parallel functions to modify impedance od circuit */
+
+  for (const std::unique_ptr<Component>& component : components) {
+
+    print_vspace(); // space for readability
+
+    component->print_data(); // prints data of component
+
+    bool input_iterator = false; // creating a boolean to check if input valid
+    std::string series_or_parallel; // creating a string to store user input of choice
+
+    while(input_iterator == false)
+    {
+      print_vspace(); // for readability
+
+      std::cout << "How would you like to add this component: Series / Parallel? (s/p)" 
+      << std::endl; // asking for user input on how to add the component
+
+      std::cin >> series_or_parallel; // assigns user input to variable
+
+      input_iterator = input_validity(series_or_parallel); // checks to see if valid input
+
+    } // break if valid input
+
+    if(series_or_parallel == "s") // if user chose to add in series
+    {
+      circuit->add_series(component); // use add_series to modify circuit
+    }
+    else if(series_or_parallel == "p") // if user chose to add in parallel
+    {
+      circuit->add_parallel(component); // use add_parallel to modify circuit
+    }
+    
   }
 }
 
@@ -74,6 +147,13 @@ int main() {
 
   read_components(FILE_NAME, components); // read components from file, add to vector
   print_components_vector(components); // print the contents of the vector
+
+  std::unique_ptr<Circuit> circuit;
+  
+  print_dash();
+  create_circuit(circuit, components);
+
+  circuit->print_data();
 
   return 0;
 

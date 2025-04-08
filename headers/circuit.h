@@ -17,17 +17,22 @@ class Circuit {
 
 protected:
 
-  double impedance;  // stores the impedance of the whole circuit
-  std::vector<std::unique_ptr<Component>> components; // smart pointer to vector of components
+  std::complex<double> impedance;  // stores the impedance of the whole circuit
 
 public:
 
   Circuit(); // defining a default constructor
 
   /* Defining paramaterized constructor, containing the impedance */
-  Circuit(double impedance); 
+  Circuit(std::complex<double> impedance); 
 
   ~Circuit(); // defining destructor
+
+  /* Defining functions to add components in series or parellel */
+  void add_series(const std::unique_ptr<Component>& component);
+  void add_parallel(const std::unique_ptr<Component>& component);
+
+  void print_data() const; // defining a print data function
 
 };
 
