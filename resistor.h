@@ -22,9 +22,17 @@ public:
   Additionally contains resistance (differing from base class) */
   Resistor(std::string r_name, double r_frequency, double resistance); 
 
-  double get_resistance() const;
+  void set_frequency() override; // override the setter for frequency
 
-  void print_data() const override;
+  double get_resistance() const; // define new getter for resistance
+
+  /* Override all the base getters */
+  double get_frequency() const override;
+  std::complex<double> get_impedance() const override;
+  double get_impedance_magnitude() const override;
+  double get_phase_difference() const override;
+
+  void print_data() const override; // override the print data function
 
 };
 

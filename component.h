@@ -32,7 +32,7 @@ public:
   the magnitude of the impedance (real) and the phase difference (real).*/
   virtual double get_frequency() const = 0; // use of const = 0 makes these pure virtual
   virtual std::complex<double> get_impedance() const = 0;
-  virtual double get_magnitude() const = 0;
+  virtual double get_impedance_magnitude() const = 0;
   virtual double get_phase_difference() const = 0;
 
   // defining a print data function as purely virtual, such that it must be overriden

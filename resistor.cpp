@@ -37,6 +37,15 @@ Resistor::~Resistor()
 }
 
 
+// Overriding the setter for frequency
+void Resistor::set_frequency()
+{
+  print_vspace();
+  std::cout << "Setting new frequency: " << std::endl;
+  // RETURN TO THE SETTER
+}
+
+
 // Defining a getter for the resistance
 double Resistor::get_resistance() const
 {
@@ -44,4 +53,37 @@ double Resistor::get_resistance() const
 }
 
 
+/* Overriding all the getters */
+double Resistor::get_frequency() const
+{
+  return frequency;
+}
+
+
+std::complex<double> Resistor::get_impedance() const
+{
+  /* Impedance for a resistor is just its resistance.
+  Function returns the resistance as a complex number*/
+  return ;
+}
+
+
+double Resistor::get_impedance_magnitude() const
+{
+  /* Magnitude of impedance for resistor is just the resistance.
+  So function returns the resistance. */
+  return resistance; 
+}
+
+
+double Resistor::get_phase_difference() const
+{
+  return 0.0;
+}
+
+
+void Resistor::print_data() const
+{
+  print_vspace();
+}
 
