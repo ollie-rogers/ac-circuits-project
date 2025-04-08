@@ -22,6 +22,8 @@ public:
   Additionally contains resistance (differing from base class) */
   Resistor(std::string r_name, double r_frequency, double resistance); 
 
+  double get_resistance() const;
+
   void print_data() const override;
 
 };
