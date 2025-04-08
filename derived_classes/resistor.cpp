@@ -36,11 +36,12 @@ Resistor::~Resistor()
 
 
 // Overriding the setter for frequency
-void Resistor::set_frequency()
+void Resistor::set_frequency(double new_frequency)
 {
   print_vspace();
-  std::cout << "Setting new frequency: " << std::endl;
-  // RETURN TO THE SETTER
+  std::cout << "Setting new frequency: "
+            << new_frequency << " Hz" << std::endl; // call message
+  frequency = new_frequency;
 }
 
 
@@ -88,6 +89,6 @@ void Resistor::print_data() const
             << "Name: " << get_name()
             << "\nMemroy Location: " << this
             << "\nResistance: " << get_resistance()
-            << " Ohms"<< std::endl; // call message
+            << " \u03A9"<< std::endl; // call message
 } 
 

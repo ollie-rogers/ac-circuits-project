@@ -23,7 +23,7 @@ public:
 
   ~Resistor() override; // overriding the base class destructor
 
-  void set_frequency() override; // override the setter for frequency
+  void set_frequency(double new_frequency) override; // override the setter for frequency
 
   double get_resistance() const; // define new getter for resistance
 

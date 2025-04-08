@@ -23,7 +23,7 @@ public:
   virtual ~Component(); // desctructor for base class
 
   // defining purely vitrual setter for the frequency (const = 0 so pure virtual)
-  virtual void set_frequency() = 0; 
+  virtual void set_frequency(double new_frequency) = 0; 
 
   // Default getter for name, this does not need to be overriden in derived classes
   std::string get_name() const;
