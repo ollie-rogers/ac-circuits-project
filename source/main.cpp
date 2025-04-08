@@ -14,6 +14,7 @@
 
 
 std::string FILE_NAME = "input_components.csv"; // defining the input file name
+double FREQUENCY = 50.0; // frequency of AC circuit in Hz (change accordingly)
 
 
 void error_message() {
@@ -61,21 +62,19 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
 
       std::stringstream ss(line); // make stringstream of current line
       std::string type, name; // deinfing variables to store type, name, frequency and value (e.g. resistance)
-      double value, frequency;
+      double value;
 
       std::getline(ss, type, ','); // read up to first comma, this is type
       std::getline(ss, name, ','); // read up to nect comma, this is name
       ss >> value; // extract the numeric value, this is value
-      ss.ignore(1, ',');  // Skip the comma after value
-      ss >> frequency; // so all thats left is frequency
 
       // Create smart pointers and add to vector
       if (type == "Resistor") { 
-          components.push_back(std::make_unique<Resistor>(name, value, frequency)); // add resistor
+          components.push_back(std::make_unique<Resistor>(name, value, FREQUENCY)); // add resistor
       } else if (type == "Capacitor") {
-          components.push_back(std::make_unique<Capacitor>(name, value, frequency)); // add capacitor
+          components.push_back(std::make_unique<Capacitor>(name, value, FREQUENCY)); // add capacitor
       } else if (type == "Inductor") {
-          components.push_back(std::make_unique<Inductor>(name, value, frequency)); // add inductor
+          components.push_back(std::make_unique<Inductor>(name, value, FREQUENCY)); // add inductor
       }
   }
 
