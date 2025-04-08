@@ -17,7 +17,7 @@ Inductor::Inductor() : Component(), inductance(0.0)
 
 /* Paramaterized contructor. Constructs capacitor by calling base component constructor and
 setting inductance. */ 
-Inductor::Inductor(std::string r_name, double r_frequency, double Inductance)
+Inductor::Inductor(std::string r_name, double r_frequency, double inductance)
   : Component(r_name, r_frequency), inductance(inductance)
   {
     print_vspace(); // space for readability

@@ -10,7 +10,7 @@ void print_dash();
 void print_vspace();
 
 // List of Constants
-constexpr double pi = 3.14159265358979323846; // value of pi to lots of dp
+constexpr double PI = 3.14159265358979323846; // value of pi to lots of dp
 
 
 #endif // UTILS_H
