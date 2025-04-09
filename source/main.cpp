@@ -21,7 +21,7 @@ void initial_statement()
 {
   print_dash(); // for readability
   std::cout << "\nPROGRAM FUNCTIONALITY:\n" 
-            << " - Reads in components from library\n" 
+            << "\n - Reads in components from library\n" 
             << " - Takes user input to construct an arbitrary circuit\n"
             << std::endl; // print statement to explain the program
 }
@@ -33,6 +33,19 @@ void error_message() {
   std::cin.clear();  // clear a failed state
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
   std::cout << "Invalid input. Please try again" << std::endl;
+}
+
+
+void print_user_guide() 
+{
+  print_dash(); // to separate from above outputs
+
+  std::cout << "Command\t\tDescription" << std::endl;
+  std::cout << "---------------------------------------------" << std::endl;
+  std::cout << "c\t\tCreate a new circuit" << std::endl;
+  std::cout << "e\t\tExit the program" << std::endl;
+  std::cout << "h\t\tDisplay this help message" << std::endl;
+  std::cout << "g\t\tDisplay component library" << std::endl;
 }
 
 
@@ -231,9 +244,11 @@ int main() {
 
   /* Create a vector of smart pointers to arbitrary components */
   std::vector<std::unique_ptr<Component>> components;
+  std::vector<std::unique_ptr<Circuit>> circuits;
 
   read_components(FILE_NAME, components); // read components from file, add to vector
-  print_components_vector(components); // print the contents of the vector
+
+  print_user_guide();
 
   // Your program will now just wait for the user input
   std::string user_input;
@@ -242,7 +257,7 @@ int main() {
   {
     // Wait for user input. The program will pause here.
     print_dash();
-    std::cout << "Enter 'c' to create a circuit, 'e' to exit: ";
+    std::cout << " " << std::endl;
     std::cin >> user_input;
 
     if (user_input == "c") 
@@ -257,6 +272,16 @@ int main() {
       // create_circuit_old(circuit, components); (old create circtui function)
       create_circuit(circuit, components);
     } 
+
+    else if(user_input == "h")
+    {
+      print_user_guide();
+    }
+
+    else if(user_input == "g") // if user inputs g
+    {
+      print_components_vector(components); // print the library
+    }
 
     else if (user_input == "e") 
     {
