@@ -400,8 +400,11 @@ int main() {
     else 
     {
         // If input is not 'c' or 'e', you can handle it here.
+        std::cin.clear();  // clear a failed state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
         std::cout << "Invalid option. Please enter 'c' or 'e'." << std::endl;
     }
+    
   }
 
   print_dash(); // for readability
