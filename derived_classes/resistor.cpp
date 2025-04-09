@@ -89,6 +89,10 @@ void Resistor::print_data() const
             << "Name: " << get_name()
             << "\nMemroy Location: " << this
             << "\nResistance: " << get_resistance()
-            << " Ohms"<< std::endl; // call message
+            << " Ohms\n"
+            << "Impedance Magnitude: " << get_impedance_magnitude()
+            << " Ohms\nPhase Shift: "
+            << get_phase_difference() << " radians"
+            << std::endl; // call message
 } 
 

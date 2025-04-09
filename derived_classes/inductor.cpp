@@ -93,6 +93,10 @@ void Inductor::print_data() const
             << "Name: " << get_name()
             << "\nMemroy Location: " << this
             << "\nInductance: " << get_inductance()
-            << " H"<< std::endl; // call message
+            << " H\n"
+            << "Impedance Magnitude: " << get_impedance_magnitude()
+            << " Ohms\nPhase Shift: "
+            << get_phase_difference() << " radians"
+            << std::endl; // call message
 } 
 

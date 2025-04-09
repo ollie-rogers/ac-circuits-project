@@ -148,8 +148,11 @@ int main() {
   print_components_vector(components); // print the contents of the vector
 
   print_dash(); // space for readability
+
+  // create a smart pointer to a circuit
   std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
+  // ask user to build circuit with components
   create_circuit(circuit, components);
 
   circuit->print_data();
