@@ -43,9 +43,11 @@ void print_user_guide()
   std::cout << "Command\t\tDescription" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
   std::cout << "c\t\tCreate a new circuit" << std::endl;
-  std::cout << "e\t\tExit the program" << std::endl;
+  std::cout << "x\t\tExit the program" << std::endl;
   std::cout << "h\t\tDisplay this help message" << std::endl;
   std::cout << "g\t\tDisplay component library" << std::endl;
+  std::cout << "q\t\tDisplay circuit library" << std::endl;
+  std::cout << "e\t\tEdit a circuit" << std::endl;
 }
 
 
@@ -88,7 +90,7 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
 }
 
 
-void print_components_vector(const std::vector<std::unique_ptr<Component>>& components)
+void print_component_library(const std::vector<std::unique_ptr<Component>>& components)
 {
   /* Parameters:
    - components (vector of smart pointers to arbitrary components)
@@ -105,6 +107,29 @@ void print_components_vector(const std::vector<std::unique_ptr<Component>>& comp
     std::cout << "\n" << counter << ") " 
               << std::endl; // label component number in library
     component->print_data(); // print data of component
+    counter += 1;
+  }
+
+}
+
+
+void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits)
+{
+  /* Parameters:
+   - components (vector of smart pointers to arbitrary components)
+   Aims:
+   - to iterate through the vector
+   - use the print data functions to print each component*/
+
+  print_dash(); // for readability
+  std::cout << "\nCIRCUIT LIBRARY:" << std::endl;
+
+  int counter = 1; // initialising variable to label number of component
+
+  for (const std::unique_ptr<Circuit>& circuit : circuits) {
+    std::cout << "\n" << counter << ") " 
+              << std::endl; // label component number in library
+    circuit->print_data(); // print data of component
     counter += 1;
   }
 
@@ -271,6 +296,9 @@ int main() {
       // ask user to build circuit with components
       // create_circuit_old(circuit, components); (old create circtui function)
       create_circuit(circuit, components);
+
+      // add circuit to circuit library
+      circuits.push_back(std::move(circuit));  // Move the unique_ptr to the vector
     } 
 
     else if(user_input == "h")
@@ -280,22 +308,32 @@ int main() {
 
     else if(user_input == "g") // if user inputs g
     {
-      print_components_vector(components); // print the library
+      print_component_library(components); // print the library
     }
 
-    else if (user_input == "e") 
+    else if(user_input == "x") 
     {
         // If 'e' is entered, exit the program
         std::cout << "Exiting program." << std::endl;
         break;  // Exit the loop and terminate the program
     } 
 
+    else if(user_input == "e")
+    {
+      
+    }
+
+    else if(user_input == "q")
+    {
+      print_circuit_library(circuits);
+    }
+
     else 
     {
         // If input is not 'c' or 'e', you can handle it here.
         std::cin.clear();  // clear a failed state
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-        std::cout << "Invalid option. Please enter 'c' or 'e'." << std::endl;
+        std::cout << "Invalid option. Refer to the user guide (h)" << std::endl;
     }
   }
 
