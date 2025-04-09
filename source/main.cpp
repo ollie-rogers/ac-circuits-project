@@ -160,7 +160,6 @@ void print_components_vector(const std::vector<std::unique_ptr<Component>>& comp
     counter += 1;
   }
 
-  print_dash(); // readability
 }
 
 
@@ -369,14 +368,41 @@ int main() {
   read_components(FILE_NAME, components); // read components from file, add to vector
   print_components_vector(components); // print the contents of the vector
 
-  // create a smart pointer to a circuit
-  std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
+  // Your program will now just wait for the user input
+  std::string user_input;
 
-  // ask user to build circuit with components
-  // create_circuit_old(circuit, components); (old create circtui function)
-  create_circuit(circuit, components);
+  while (true) 
+  {
+    // Wait for user input. The program will pause here.
+    print_dash();
+    std::cout << "Enter 'c' to create a circuit, 'e' to exit: ";
+    std::cin >> user_input;
 
-  circuit->print_data();
+    if (user_input == "c") 
+    {
+
+      // create a smart pointer to a circuit
+      std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
+
+      // ask user to build circuit with components
+      // create_circuit_old(circuit, components); (old create circtui function)
+      create_circuit(circuit, components);
+
+      circuit->print_data(); // print circuit data
+
+    } 
+    else if (user_input == "e") 
+    {
+        // If 'e' is entered, exit the program
+        std::cout << "Exiting program." << std::endl;
+        break;  // Exit the loop and terminate the program
+    } 
+    else 
+    {
+        // If input is not 'c' or 'e', you can handle it here.
+        std::cout << "Invalid option. Please enter 'c' or 'e'." << std::endl;
+    }
+  }
 
   print_dash(); // for readability
 
