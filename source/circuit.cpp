@@ -35,7 +35,7 @@ Circuit::~Circuit()
 {
   print_vspace(); // space for readability
   std::cout << "Calling Circuit Destructor:\n"
-            << "Destroying" << this << std::endl; // call message
+            << "Destroying: " << this << std::endl; // call message
   // INSERT CLEANUP CODE HERE IF NEEDED
 }
 

@@ -164,8 +164,8 @@ void print_components_vector(const std::vector<std::unique_ptr<Component>>& comp
 }
 
 
-void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
-{
+// void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
+//{
   /* Parameters:
    - circuit (smart pointer to a circuit object)
    - components (vector of smart pointers to arbitrary components) 
@@ -174,41 +174,41 @@ void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std
    - For each component, ask the user to add in series or parallel 
    - Uses add_series and add_parallel functions to modify impedance od circuit */
 
-  print_dash(); // for readability
+//  print_dash(); // for readability
 
-  for (const std::unique_ptr<Component>& component : components) {
+//  for (const std::unique_ptr<Component>& component : components) {
 
-    print_vspace(); // space for readability
+//    print_vspace(); // space for readability
 
-    component->print_data(); // prints data of component
+//    component->print_data(); // prints data of component
 
-    bool input_iterator = false; // creating a boolean to check if input valid
-    std::string series_or_parallel; // creating a string to store user input of choice
+//    bool input_iterator = false; // creating a boolean to check if input valid
+//    std::string series_or_parallel; // creating a string to store user input of choice
 
-    while(input_iterator == false)
-    {
-      print_vspace(); // for readability
+//    while(input_iterator == false)
+//    {
+//      print_vspace(); // for readability
 
-      std::cout << "How would you like to add this component: Series / Parallel? (s/p)" 
-      << std::endl; // asking for user input on how to add the component
+//      std::cout << "How would you like to add this component: Series / Parallel? (s/p)" 
+//      << std::endl; // asking for user input on how to add the component
 
-      std::cin >> series_or_parallel; // assigns user input to variable
+//      std::cin >> series_or_parallel; // assigns user input to variable
 
-      input_iterator = s_or_p_input_validity(series_or_parallel); // checks to see if valid input
+//      input_iterator = s_or_p_input_validity(series_or_parallel); // checks to see if valid input
 
-    } // breaks if valid input
+//    } // breaks if valid input
 
-    if(series_or_parallel == "s") // if user chose to add in series
-    {
-      circuit->add_series(component); // use add_series to modify circuit
-    }
-    else if(series_or_parallel == "p") // if user chose to add in parallel
-    {
-      circuit->add_parallel(component); // use add_parallel to modify circuit
-    }
+//    if(series_or_parallel == "s") // if user chose to add in series
+//    {
+//      circuit->add_series(component); // use add_series to modify circuit
+//    }
+//    else if(series_or_parallel == "p") // if user chose to add in parallel
+//    {
+//      circuit->add_parallel(component); // use add_parallel to modify circuit
+//    }
 
-  }
-}
+//  }
+//}
 
 
 void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
@@ -244,7 +244,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
           std::cout << "Input too high."
                     << "Please choose integer in library" << std::endl;
         } 
-        else if(component_choice_int - 1 <= 0)
+        else if(component_choice_int <= 0)
         {
           choice_validity = false;
           std::cout << "Input too low."
@@ -262,10 +262,23 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 
     while(choice_sp_validity == false) // while input is invalid
     {
-      std::cout << "Would you like to add in series or parallel?" << std::endl;
+      std::cout << "\nWould you like to add in series or parallel?" << std::endl;
       std::cin >> series_or_parallel;
       choice_sp_validity = s_or_p_input_validity(series_or_parallel);
     } // break if choice is valid
+
+    /*Next we actually add the component in series / parallel */
+
+    if(series_or_parallel == "s") 
+    {
+      // if chose series, add chosen component in series
+      circuit->add_series(components[component_choice_int-1]);
+    }
+    else if(series_or_parallel == "p")
+    {
+      // if chose parallel, add chosen component in parallel
+      circuit->add_parallel(components[component_choice_int-1]);
+    }
 
     /* Next we want to add the component accordingly */
 
@@ -276,7 +289,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
     
     while(choice_yn_validity == false) // while input is invalid
     {
-      std::cout << "Would you like to add another component? (y/n)" << std::endl;
+      std::cout << "\nWould you like to add another component? (y/n)" << std::endl;
       std::cin >> choice_to_add_another;
       choice_yn_validity = y_or_n_input_validity(choice_to_add_another);    
     } // break if choice is valid
