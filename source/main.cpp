@@ -365,7 +365,7 @@ int choose_component(std::unique_ptr<Circuit>& circuit, const std::vector<std::u
 
   while(true)
   {
-    std::cout << "\nEnter Component: " << std::endl;
+    std::cout << "\nEnter Component Number: " << std::endl;
     std::cin >> component_choice_str;
 
     try 
@@ -410,10 +410,79 @@ int choose_component(std::unique_ptr<Circuit>& circuit, const std::vector<std::u
   return component_choice_int;
 }
 
+
+void add_component(std::unique_ptr<Circuit>& circuit, const std::unique_ptr<Component>& component)
+{
+  std::string choice;
+
+  while (true) 
+  {
+    std::cout << "Series or Parallel? (s/p) ";
+    std::cin >> choice;
+
+    if (choice == "s" || choice == "S") 
+    {
+      circuit->add_series(component);
+      break;
+    } 
+
+    else if (choice == "p" || choice == "P") 
+    {
+      circuit->add_parallel(component);
+      break;  // Exit the loop and terminate the program
+    } 
+
+    else 
+    {
+        // If input is not s or p 
+        std::cin.clear();  // clear a failed state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+        std::cout << "Invalid input" << std::endl; // say its invalid
+    }
+
+  }
+}
+
+
 void create_circuit_2(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
 {
   int component_index = choose_component(circuit, components);
   std::cout << "COMPONENT INDEX CHOSEN: " << component_index << std::endl;
+  circuit->add_series(components[component_index-1]);
+
+  std::string add_another;
+
+  while (true) 
+  {
+    // Wait for user input. The program will pause here.
+    print_dash();
+    std::cout << "Add another? (y/n) ";
+    std::cin >> add_another;
+
+    if (add_another == "y") 
+    {
+      component_index = choose_component(circuit, components);
+      std::cout << "COMPONENT INDEX CHOSEN: " << component_index << std::endl;
+      add_component(circuit, components[component_index-1]);
+    } 
+
+    else if (add_another == "n") 
+    {
+        // If 'e' is entered, exit the program
+        std::cout << "Circuit Creation Complete" << std::endl;
+        break;  // Exit the loop and terminate the program
+    } 
+
+    else 
+    {
+        // If input is not 'c' or 'e', you can handle it here.
+        std::cin.clear();  // clear a failed state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+        std::cout << "Invalid input." << std::endl;
+    }
+  }
+
+  circuit->print_data(); // print the circuit information once created
 
 }
 
@@ -440,15 +509,15 @@ int main() {
 
     if (user_input == "c") 
     {
+      print_dash(); // readability
       std::cout << "CREATING CIRCUIT:" << std::endl;
+
       // create a smart pointer to a circuit
       std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
       // ask user to build circuit with components
       // create_circuit_old(circuit, components); (old create circtui function)
       create_circuit_2(circuit, components);
-
-      circuit->print_data(); // print circuit data
     } 
 
     else if (user_input == "e") 
