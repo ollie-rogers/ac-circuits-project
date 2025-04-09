@@ -358,15 +358,15 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 }
 
 
-void create_circuit_2(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
+int choose_component(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
 {
-  std::string component_choice_str; 
+  std::string component_choice_str;
+  int component_choice_int = -995; 
 
   while(true)
   {
-    std::cout << "\nEnter First Component: " << std::endl;
+    std::cout << "\nEnter Component: " << std::endl;
     std::cin >> component_choice_str;
-    int component_choice_int = -995;
 
     try 
     { // try converting the input to an integer
@@ -396,17 +396,24 @@ void create_circuit_2(std::unique_ptr<Circuit>& circuit, const std::vector<std::
       << " Please choose integer in library" << std::endl;
     }
 
-    else if(component_choice_int == -995)
+    else if(component_choice_int == -995) // will be this if the input wasnt integer
     {
+      // do nothing (already printed error)
     }
 
     else
     {
       break;
     }
-
-
   }
+
+  return component_choice_int;
+}
+
+void create_circuit_2(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
+{
+  int component_index = choose_component(circuit, components);
+  std::cout << "COMPONENT INDEX CHOSEN: " << component_index << std::endl;
 
 }
 
