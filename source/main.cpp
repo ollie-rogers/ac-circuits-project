@@ -17,6 +17,16 @@ std::string FILE_NAME = "input_components.csv"; // defining the input file name
 double FREQUENCY = 50.0; // frequency of AC circuit in Hz (change accordingly)
 
 
+void initial_statement()
+{
+  print_dash(); // for readability
+  std::cout << "\nPROGRAM FUNCTIONALITY:\n" 
+            << " - Reads in components from library\n" 
+            << " - Takes user input to construct an arbitrary circuit\n"
+            << std::endl; // print statement to explain the program
+}
+
+
 void error_message() {
     
   //prints an error message if an input is of the wrong form
@@ -58,6 +68,9 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
   std::ifstream file(filename); // opening the file
   std::string line; // defining a string which holds each line whilst reading
 
+  print_dash(); // for readability
+  std::cout << "\nGENERATING COMPONENTS:" << std::endl;
+
   while (std::getline(file, line)) { // Whilst lines remain
 
       std::stringstream ss(line); // make stringstream of current line
@@ -88,6 +101,10 @@ void print_components_vector(const std::vector<std::unique_ptr<Component>>& comp
    Aims:
    - to iterate through the vector
    - use the print data functions to print each component*/
+
+  print_dash(); // for readability
+  std::cout << "\nCOMPONENT LIBRARY:" << std::endl;
+
   for (const std::unique_ptr<Component>& component : components) {
     component->print_data();
   }
@@ -103,6 +120,8 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
    - Iterate through the vector of components
    - For each component, ask the user to add in series or parallel 
    - Uses add_series and add_parallel functions to modify impedance od circuit */
+
+  print_dash(); // for readability
 
   for (const std::unique_ptr<Component>& component : components) {
 
@@ -141,13 +160,13 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 
 int main() {
 
+  initial_statement(); // output to explain program
+
   /* Create a vector of smart pointers to arbitrary components */
   std::vector<std::unique_ptr<Component>> components;
 
   read_components(FILE_NAME, components); // read components from file, add to vector
   print_components_vector(components); // print the contents of the vector
-
-  print_dash(); // space for readability
 
   // create a smart pointer to a circuit
   std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();

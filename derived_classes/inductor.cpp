@@ -89,8 +89,7 @@ double Inductor::get_phase_difference() const
 void Inductor::print_data() const
 {
   print_vspace(); // space for readability
-  std::cout << "COMPONENT DATA:\n"
-            << "Name: " << get_name()
+  std::cout << "Name: " << get_name()
             << "\nMemroy Location: " << this
             << "\nInductance: " << get_inductance()
             << " H\n"
