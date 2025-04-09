@@ -358,6 +358,59 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 }
 
 
+void create_circuit_2(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
+{
+  std::string component_choice_str; 
+
+  while(true)
+  {
+    std::cout << "\nEnter First Component: " << std::endl;
+    std::cin >> component_choice_str;
+    int component_choice_int = -995;
+
+    try 
+    { // try converting the input to an integer
+      component_choice_int = std::stoi(component_choice_str);  
+    } 
+    catch (const std::invalid_argument& e) 
+    {
+      std::cout << "Invalid input. Please enter a valid number." << std::endl;
+    }
+          
+    // store size of library vector as size to check if integer input in range
+    int size = static_cast<int>(components.size()); // make sure its a signed integer
+
+    if(component_choice_int - 1 >= size) // check if right size
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too high."
+                 << " Please choose integer in library" << std::endl;
+    } 
+    
+    else if(component_choice_int <= 0 && component_choice_int != -995)
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too low."
+      << " Please choose integer in library" << std::endl;
+    }
+
+    else if(component_choice_int == -995)
+    {
+    }
+
+    else
+    {
+      break;
+    }
+
+
+  }
+
+}
+
+
 int main() {
 
   initial_statement(); // output to explain program
@@ -380,23 +433,24 @@ int main() {
 
     if (user_input == "c") 
     {
-
+      std::cout << "CREATING CIRCUIT:" << std::endl;
       // create a smart pointer to a circuit
       std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
       // ask user to build circuit with components
       // create_circuit_old(circuit, components); (old create circtui function)
-      create_circuit(circuit, components);
+      create_circuit_2(circuit, components);
 
       circuit->print_data(); // print circuit data
-
     } 
+
     else if (user_input == "e") 
     {
         // If 'e' is entered, exit the program
         std::cout << "Exiting program." << std::endl;
         break;  // Exit the loop and terminate the program
     } 
+
     else 
     {
         // If input is not 'c' or 'e', you can handle it here.
@@ -404,7 +458,6 @@ int main() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
         std::cout << "Invalid option. Please enter 'c' or 'e'." << std::endl;
     }
-    
   }
 
   print_dash(); // for readability
