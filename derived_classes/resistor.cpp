@@ -84,7 +84,6 @@ double Resistor::get_phase_difference() const
 
 void Resistor::print_data() const
 {
-  print_vspace(); // space for readability
   std::cout << "Name: " << get_name()
             << "\nMemroy Location: " << this
             << "\nResistance: " << get_resistance()

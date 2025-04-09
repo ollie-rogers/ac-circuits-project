@@ -94,9 +94,10 @@ void Circuit::print_data() const
 {
   print_vspace();
   std::cout << "CIRCUIT DATA:\n"
-            << "Impedance: " 
-            << impedance.real() << " + " 
-            << impedance.imag() << "i Ohms" 
+            << "Impedance Magnitude: " 
+            <<  std::abs(impedance) << " Ohms"
+            << "\nPhase Shift: " 
+            << std::arg(impedance) << " radians"
             << "\nMemory Location: " << this << std::endl;
 
 }

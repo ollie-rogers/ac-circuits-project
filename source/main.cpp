@@ -41,14 +41,22 @@ bool input_validity(std::string choice) {
   /* Checks whether the choice of whether to print the full list is of the right form.
   If of the right form returns true.
   If not of the right form, prints error message and returns false. */
-  if (std::cin.fail() || std::cin.peek() != '\n') {
+  if (std::cin.fail() || std::cin.peek() != '\n') 
+  {
       error_message();
       return false;
-  } else if (choice == "s" || choice == "p") {
-      return true;
-  } else {
-      error_message();
-      return false;
+  }    
+
+  try 
+  { // try converting the input to an integer
+    std::stoi(choice);  
+    return true; // If successful, return true
+  } 
+  catch (const std::invalid_argument& e) 
+  {
+    // If it throws an exception, not an integer
+    error_message(); // print an error message
+    return false; // unsuccesful, so return false
   }
 
   return false;
@@ -105,13 +113,20 @@ void print_components_vector(const std::vector<std::unique_ptr<Component>>& comp
   print_dash(); // for readability
   std::cout << "\nCOMPONENT LIBRARY:" << std::endl;
 
+  int counter = 1; // initialising variable to label number of component
+
   for (const std::unique_ptr<Component>& component : components) {
-    component->print_data();
+    std::cout << "\n" << counter << ") " 
+              << std::endl; // label component number in library
+    component->print_data(); // print data of component
+    counter += 1;
   }
+
+  print_dash(); // readability
 }
 
 
-void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
+void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
 {
   /* Parameters:
    - circuit (smart pointer to a circuit object)
@@ -158,6 +173,50 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 }
 
 
+void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
+{
+  bool choice_validity = false; // initialising variable to loop until choice is valid
+  std::string component_choice_str; // initialising variable for choosing component to add
+  int component_choice_int; // initialising integer version
+
+  std::cout << "\nCREATING CIRCUIT:" << std::endl; 
+
+  while(choice_validity == false)
+  {
+    std::cout << "\nWhich component would you like to add first?"
+              << "\nPlease choose a number (1, 2, 3... given in library)" << std::endl;
+    std::cin >> component_choice_str;
+
+    choice_validity = input_validity(component_choice_str);
+    if(choice_validity == true)
+    {
+      component_choice_int = std::stoi(component_choice_str);
+      
+      // store size of library vector as size to check if integer input in range
+      int size = static_cast<int>(components.size()); // make sure its a signed integer
+
+      if(component_choice_int - 1 >= size) // check if right size
+      {
+        choice_validity = false;
+        std::cout << "Input too high."
+                  << "Please choose integer in library" << std::endl;
+      } 
+      else if(component_choice_int - 1 <= 0)
+      {
+        choice_validity = false;
+        std::cout << "Input too low."
+        << "Please choose integer in library" << std::endl;
+      }
+    }
+
+    
+  }
+
+  std::cout << "If it prints this, it worked" << std::endl;
+  
+}
+
+
 int main() {
 
   initial_statement(); // output to explain program
@@ -172,11 +231,12 @@ int main() {
   std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
   // ask user to build circuit with components
+  // create_circuit_old(circuit, components); (old create circtui function)
   create_circuit(circuit, components);
 
   circuit->print_data();
 
-  print_dash();
+  print_dash(); // for readability
 
   return 0;
 
