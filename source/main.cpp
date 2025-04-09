@@ -36,7 +36,45 @@ void error_message() {
 }
 
 
-bool input_validity(std::string choice) {
+bool y_or_n_input_validity(std::string choice) {
+
+  /* Checks whether the choice of whether to print the full list is of the right form.
+  If of the right form returns true.
+  If not of the right form, prints error message and returns false. */
+  if (std::cin.fail() || std::cin.peek() != '\n') {
+      error_message();
+      return false;
+  } else if (choice == "y" || choice == "n") {
+      return true;
+  } else {
+      error_message();
+      return false;
+  }
+
+  return false;
+}
+
+
+bool s_or_p_input_validity(std::string choice) {
+
+  /* Checks whether the choice of whether to print the full list is of the right form.
+  If of the right form returns true.
+  If not of the right form, prints error message and returns false. */
+  if (std::cin.fail() || std::cin.peek() != '\n') {
+      error_message();
+      return false;
+  } else if (choice == "s" || choice == "p") {
+      return true;
+  } else {
+      error_message();
+      return false;
+  }
+
+  return false;
+}
+
+
+bool int_input_validity(std::string choice) {
 
   /* Checks whether the choice of whether to print the full list is of the right form.
   If of the right form returns true.
@@ -156,7 +194,7 @@ void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std
 
       std::cin >> series_or_parallel; // assigns user input to variable
 
-      input_iterator = input_validity(series_or_parallel); // checks to see if valid input
+      input_iterator = s_or_p_input_validity(series_or_parallel); // checks to see if valid input
 
     } // breaks if valid input
 
@@ -175,45 +213,81 @@ void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std
 
 void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
 {
-  bool choice_validity = false; // initialising variable to loop until choice is valid
-  std::string component_choice_str; // initialising variable for choosing component to add
-  int component_choice_int; // initialising integer version
+  std::cout << "\nCREATING CIRCUIT:" << std::endl; // call message
 
-  std::cout << "\nCREATING CIRCUIT:" << std::endl; 
+  // defining boolean variable to iterate until choose not to add any more components
+  bool choose_to_exit = false; 
 
-  while(choice_validity == false)
+  while(choose_to_exit == false) // iterates until choose not to add any more
   {
-    std::cout << "\nWhich component would you like to add first?"
-              << "\nPlease choose a number (1, 2, 3... given in library)" << std::endl;
-    std::cin >> component_choice_str;
+    bool choice_validity = false; // initialising variable to loop until choice is valid
+    std::string component_choice_str; // initialising variable for choosing component to add
+    int component_choice_int; // initialising integer version
 
-    choice_validity = input_validity(component_choice_str);
-    if(choice_validity == true)
+    while(choice_validity == false)
     {
-      component_choice_int = std::stoi(component_choice_str);
-      
-      // store size of library vector as size to check if integer input in range
-      int size = static_cast<int>(components.size()); // make sure its a signed integer
+      std::cout << "\nWhich component would you like to add first?"
+                << "\nPlease choose a number (1, 2, 3... given in library)" << std::endl;
+      std::cin >> component_choice_str;
 
-      if(component_choice_int - 1 >= size) // check if right size
+      choice_validity = int_input_validity(component_choice_str);
+      if(choice_validity == true)
       {
-        choice_validity = false;
-        std::cout << "Input too high."
-                  << "Please choose integer in library" << std::endl;
-      } 
-      else if(component_choice_int - 1 <= 0)
-      {
-        choice_validity = false;
-        std::cout << "Input too low."
-        << "Please choose integer in library" << std::endl;
+        component_choice_int = std::stoi(component_choice_str);
+        
+        // store size of library vector as size to check if integer input in range
+        int size = static_cast<int>(components.size()); // make sure its a signed integer
+
+        if(component_choice_int - 1 >= size) // check if right size
+        {
+          choice_validity = false;
+          std::cout << "Input too high."
+                    << "Please choose integer in library" << std::endl;
+        } 
+        else if(component_choice_int - 1 <= 0)
+        {
+          choice_validity = false;
+          std::cout << "Input too low."
+          << "Please choose integer in library" << std::endl;
+        }
       }
+
+      
+    }
+    
+    // initialise variable to loop until series or parallel choice is valid
+    bool choice_sp_validity = false;
+    // initialise variable to store choice of series or parallel
+    std::string series_or_parallel;
+
+    while(choice_sp_validity == false) // while input is invalid
+    {
+      std::cout << "Would you like to add in series or parallel?" << std::endl;
+      std::cin >> series_or_parallel;
+      choice_sp_validity = s_or_p_input_validity(series_or_parallel);
+    } // break if choice is valid
+
+    /* Next we want to add the component accordingly */
+
+    // initialise variable to loop until series or parallel choice is valid
+    bool choice_yn_validity = false;
+    // initialise variable to store choice of series or parallel
+    std::string choice_to_add_another;
+    
+    while(choice_yn_validity == false) // while input is invalid
+    {
+      std::cout << "Would you like to add another component? (y/n)" << std::endl;
+      std::cin >> choice_to_add_another;
+      choice_yn_validity = y_or_n_input_validity(choice_to_add_another);    
+    } // break if choice is valid
+
+    if(choice_to_add_another == "n")
+    {
+      choose_to_exit = true;
     }
 
-    
-  }
+  } // exit when choose to do so
 
-  std::cout << "If it prints this, it worked" << std::endl;
-  
 }
 
 
