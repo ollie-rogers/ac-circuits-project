@@ -136,7 +136,7 @@ void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits
 }
 
 
-int choose_component(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
+int choose_component(const std::vector<std::unique_ptr<Component>>& components)
 {
   std::string component_choice_str;
   int component_choice_int = -995; 
@@ -224,7 +224,7 @@ void add_component(std::unique_ptr<Circuit>& circuit, const std::unique_ptr<Comp
 
 void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
 {
-  int component_index = choose_component(circuit, components);
+  int component_index = choose_component(components);
   circuit->add_series(components[component_index-1]);
 
   std::string add_another;
@@ -238,7 +238,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
 
     if (add_another == "y") 
     {
-      component_index = choose_component(circuit, components);
+      component_index = choose_component(components);
       add_component(circuit, components[component_index-1]);
     } 
 
@@ -259,6 +259,107 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::un
   }
 
   circuit->print_data(); // print the circuit information once created
+
+}
+
+
+int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
+{
+  std::string circuit_choice_str;
+  int circuit_choice_int = -995; 
+
+  while(true)
+  {
+    std::cout << "\nEnter Circuit Number: " << std::endl;
+    std::cin >> circuit_choice_str;
+
+    try 
+    { // try converting the input to an integer
+      circuit_choice_int = std::stoi(circuit_choice_str);  
+    } 
+    catch (const std::invalid_argument& e) 
+    {
+      std::cout << "Invalid input. Please enter a valid number." << std::endl;
+    }
+          
+    // store size of library vector as size to check if integer input in range
+    int size = static_cast<int>(circuits.size()); // make sure its a signed integer
+
+    if(circuit_choice_int - 1 >= size) // check if right size
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too high."
+                 << " Please choose integer in library" << std::endl;
+    } 
+    
+    else if(circuit_choice_int <= 0 && circuit_choice_int != -995)
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too low."
+      << " Please choose integer in library" << std::endl;
+    }
+
+    else if(circuit_choice_int == -995) // will be this if the input wasnt integer
+    {
+      // do nothing (already printed error)
+    }
+
+    else
+    {
+      break;
+    }
+  }
+
+  return circuit_choice_int;
+}
+
+
+void edit_circuit(std::vector<std::unique_ptr<Component>>& components, std::vector<std::unique_ptr<Circuit>>& circuits)
+{
+  if(circuits.size() == 0)
+  {
+    std::cout << "No circuits have been created.\n"
+              << "To edit a circuit - you must make one." << std::endl;
+    return;
+  }
+
+  std::cout << "Which circuit would you like to edit? (see library)" << std::endl;
+  int circuit_index = choose_circuit(circuits);
+  std::string add_another;
+
+  while (true) 
+  {
+    // Wait for user input. The program will pause here.
+    print_dash();
+    std::cout << "Add component? (y/n) ";
+    std::cin >> add_another;
+    int component_index = 0; // define the component index
+
+    if (add_another == "y") 
+    {
+      component_index = choose_component(components);
+      add_component(circuits[circuit_index - 1], components[component_index-1]);
+    } 
+
+    else if (add_another == "n") 
+    {
+        // If 'e' is entered, exit the program
+        std::cout << "Circuit Editting Complete" << std::endl;
+        break;  // Exit the loop and terminate the program
+    } 
+
+    else 
+    {
+        // If input is not 'c' or 'e', you can handle it here.
+        std::cin.clear();  // clear a failed state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+        std::cout << "Invalid input." << std::endl;
+    }
+  }
+
+  circuits[circuit_index - 1]->print_data(); // print the circuit information once created
 
 }
 
@@ -320,7 +421,9 @@ int main() {
 
     else if(user_input == "e")
     {
-      
+      print_circuit_library(circuits);
+      print_dash();
+      edit_circuit(components, circuits);
     }
 
     else if(user_input == "q")
@@ -330,10 +433,10 @@ int main() {
 
     else 
     {
-        // If input is not 'c' or 'e', you can handle it here.
-        std::cin.clear();  // clear a failed state
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-        std::cout << "Invalid option. Refer to the user guide (h)" << std::endl;
+      // If input is not 'c' or 'e', you can handle it here.
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Invalid option. Refer to the user guide (h)" << std::endl;
     }
   }
 
