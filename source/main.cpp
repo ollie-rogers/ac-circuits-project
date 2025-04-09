@@ -17,14 +17,14 @@ std::string FILE_NAME = "input_components.csv"; // defining the input file name
 double FREQUENCY = 50.0; // frequency of AC circuit in Hz (change accordingly)
 
 
-void initial_statement()
-{
-  print_dash(); // for readability
-  std::cout << "\nPROGRAM FUNCTIONALITY:\n" 
-            << "\n - Reads in components from library\n" 
-            << " - Takes user input to construct an arbitrary circuit\n"
-            << std::endl; // print statement to explain the program
-}
+// void initial_statement()
+// {
+//   print_dash(); // for readability
+//   std::cout << "\nPROGRAM FUNCTIONALITY:\n" 
+//             << "\n - Reads in components from library\n" 
+//             << " - Takes user input to construct an arbitrary circuit\n"
+//             << std::endl; // print statement to explain the program
+// }
 
 
 void error_message() {
@@ -42,12 +42,12 @@ void print_user_guide()
 
   std::cout << "Command\t\tDescription" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
-  std::cout << "c\t\tCreate a new circuit" << std::endl;
-  std::cout << "x\t\tExit the program" << std::endl;
-  std::cout << "h\t\tDisplay this help message" << std::endl;
+  std::cout << "h\t\tDisplay user guide" << std::endl;
+  std::cout << "c\t\tCreate a new circuit (Basic)" << std::endl;
+  std::cout << "e\t\tEdit a circuit (Basic)" << std::endl;
   std::cout << "g\t\tDisplay component library" << std::endl;
   std::cout << "q\t\tDisplay circuit library" << std::endl;
-  std::cout << "e\t\tEdit a circuit" << std::endl;
+  std::cout << "x\t\tExit the program" << std::endl;
 }
 
 
@@ -366,7 +366,7 @@ void edit_circuit(std::vector<std::unique_ptr<Component>>& components, std::vect
 
 int main() {
 
-  initial_statement(); // output to explain program
+//  initial_statement(); // output to explain program
 
   /* Create a vector of smart pointers to arbitrary components */
   std::vector<std::unique_ptr<Component>> components;

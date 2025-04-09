@@ -18,6 +18,9 @@ class Circuit {
 protected:
 
   std::complex<double> impedance;  // stores the impedance of the whole circuit
+  std::vector<std::vector<int>> connection_matrix; // Empty matrix initially
+  std::vector<std::string> component_names;  // To store component names
+
 
 public:
 
