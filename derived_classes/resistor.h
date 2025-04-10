@@ -7,6 +7,10 @@
 #include <memory>
 
 
+/* Derived class of component - resistor
+Has an additional value - resistance 
+Overrides the purely virtual functions from component
+To calculate impedance etc. based off of its resistance. */
 class Resistor : public Component {
 
 private:

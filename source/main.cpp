@@ -51,7 +51,7 @@ void print_user_guide()
 }
 
 
-void read_components(const std::string& filename, std::vector<std::unique_ptr<Component>>& components)
+void read_components(const std::string& filename, std::vector<std::shared_ptr<Component>>& components)
 {  
   /* Parameters: 
    - components (vector of smart pointers to arbitrary components)
@@ -90,7 +90,7 @@ void read_components(const std::string& filename, std::vector<std::unique_ptr<Co
 }
 
 
-void print_component_library(const std::vector<std::unique_ptr<Component>>& components)
+void print_component_library(std::vector<std::shared_ptr<Component>>& components)
 {
   /* Parameters:
    - components (vector of smart pointers to arbitrary components)
@@ -103,7 +103,7 @@ void print_component_library(const std::vector<std::unique_ptr<Component>>& comp
 
   int counter = 1; // initialising variable to label number of component
 
-  for (const std::unique_ptr<Component>& component : components) {
+  for (const std::shared_ptr<Component>& component : components) {
     std::cout << "\n" << counter << ") " 
               << std::endl; // label component number in library
     component->print_data(); // print data of component
@@ -136,7 +136,7 @@ void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits
 }
 
 
-int choose_component(const std::vector<std::unique_ptr<Component>>& components)
+int choose_component(std::vector<std::shared_ptr<Component>>& components)
 {
   std::string component_choice_str;
   int component_choice_int = -995; 
@@ -189,7 +189,7 @@ int choose_component(const std::vector<std::unique_ptr<Component>>& components)
 }
 
 
-void add_component(std::unique_ptr<Circuit>& circuit, const std::unique_ptr<Component>& component)
+void add_component(std::unique_ptr<Circuit>& circuit, std::shared_ptr<Component>& component)
 {
   std::string choice;
 
@@ -222,7 +222,7 @@ void add_component(std::unique_ptr<Circuit>& circuit, const std::unique_ptr<Comp
 }
 
 
-void create_circuit(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components) 
+void create_circuit(std::unique_ptr<Circuit>& circuit, std::vector<std::shared_ptr<Component>>& components) 
 {
   int component_index = choose_component(components);
   circuit->add_series(components[component_index-1]);
@@ -316,7 +316,7 @@ int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
 }
 
 
-void edit_circuit(std::vector<std::unique_ptr<Component>>& components, std::vector<std::unique_ptr<Circuit>>& circuits)
+void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vector<std::unique_ptr<Circuit>>& circuits)
 {
   if(circuits.size() == 0)
   {
@@ -369,7 +369,7 @@ int main() {
 //  initial_statement(); // output to explain program
 
   /* Create a vector of smart pointers to arbitrary components */
-  std::vector<std::unique_ptr<Component>> components;
+  std::vector<std::shared_ptr<Component>> components;
   std::vector<std::unique_ptr<Circuit>> circuits;
 
   read_components(FILE_NAME, components); // read components from file, add to vector

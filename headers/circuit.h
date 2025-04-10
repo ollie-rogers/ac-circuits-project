@@ -19,7 +19,8 @@ protected:
 
   std::complex<double> impedance;  // stores the impedance of the whole circuit
   std::vector<std::vector<int>> connection_matrix; // Empty matrix initially
-  std::vector<std::string> component_names;  // To store component names
+  std::vector<std::shared_ptr<Component>> added_components;  // To store added components
+  // const because we don't want to be editing the Components
 
 
 public:
@@ -32,8 +33,8 @@ public:
   ~Circuit(); // defining destructor
 
   /* Defining functions to add components in series or parellel */
-  void add_series(const std::unique_ptr<Component>& component);
-  void add_parallel(const std::unique_ptr<Component>& component);
+  void add_series(std::shared_ptr<Component>& component);
+  void add_parallel(std::shared_ptr<Component>& component);
 
   void print_data() const; // defining a print data function
 
