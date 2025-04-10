@@ -45,6 +45,7 @@ void print_user_guide()
   std::cout << "h\t\tDisplay user guide" << std::endl;
   std::cout << "c\t\tCreate a new circuit (Basic)" << std::endl;
   std::cout << "e\t\tEdit a circuit (Basic)" << std::endl;
+  std::cout << "C\t\tOpen complex circuit editor" << std::endl;
   std::cout << "g\t\tDisplay component library" << std::endl;
   std::cout << "q\t\tDisplay circuit library" << std::endl;
   std::cout << "x\t\tExit the program" << std::endl;
@@ -364,6 +365,68 @@ void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vect
 }
 
 
+void complex_circuit_editor_guide()
+{
+  print_dash(); // to separate from above outputs
+
+  std::cout << "Command\t\tDescription" << std::endl;
+  std::cout << "---------------------------------------------" << std::endl;
+  std::cout << "h\t\tDisplay circuit editor guide" << std::endl;
+  std::cout << "a\t\tAdd component" << std::endl;
+  std::cout << "r\t\tRemove component" << std::endl;
+  std::cout << "n\t\tAdd nested circuit" << std::endl;
+  std::cout << "i\t\tDisplay current circuit info" << std::endl;
+  std::cout << "x\t\tExit the circuit editor" << std::endl;
+}
+
+
+void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components, std::unique_ptr<Circuit>& circuit) 
+{
+  complex_circuit_editor_guide();
+  // Your program will now just wait for the user input
+  std::string user_input;
+
+  while (true) 
+  {
+    // Wait for user input. The program will pause here.
+    print_dash();
+    std::cout << " " << std::endl;
+    std::cin >> user_input;
+
+    if(user_input == "h")
+    {
+      complex_circuit_editor_guide();
+    }
+
+    else if(user_input == "i") // if user inputs g
+    {
+      circuit->print_data(); // print the library
+    }
+
+    else if(user_input == "x") 
+    {
+        // If 'e' is entered, exit the program
+        std::cout << "Exiting circuit editor." << std::endl;
+        break;  // Exit the loop and terminate the program
+    } 
+
+    else if(user_input == "a")
+    {
+      int component_index = choose_component(components);
+      add_component(circuit, components[component_index-1]);
+    }
+
+    else 
+    {
+      // If input is not 'c' or 'e', you can handle it here.
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Invalid option. Refer to the circuit editor guide (h)" << std::endl;
+    }
+  }
+}
+
+
 int main() {
 
 //  initial_statement(); // output to explain program
@@ -429,6 +492,22 @@ int main() {
     else if(user_input == "q")
     {
       print_circuit_library(circuits);
+    }
+
+    else if(user_input == "C")
+    {
+      std::cout << "OPENING CIRCUIT EDITOR" << std::endl;
+
+      // create a smart pointer to a circuit
+      std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
+
+      // ask user to build circuit with components
+      // create_circuit_old(circuit, components); (old create circtui function)
+      complex_circuit_editor(components, circuit);
+
+      // add circuit to circuit library
+      circuits.push_back(std::move(circuit)); 
+
     }
 
     else 

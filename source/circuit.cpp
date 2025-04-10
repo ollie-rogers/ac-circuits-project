@@ -173,7 +173,7 @@ void Circuit::print_data() const
             << "\n # Memory Location: " << this << std::endl;
 
   // Print the connection matrix
-  std::cout << "\nCONNECTION MATRIX:\n";
+  std::cout << "\nCONNECTION MATRIX:\n\n  ";
 
   for (const auto& row : connection_matrix)
   {
@@ -183,18 +183,21 @@ void Circuit::print_data() const
       std::cout << value << " ";  // Print each matrix element
     }
     
-    std::cout << "\n";  // Move to the next line after printing a row
+    std::cout << "\n  ";  // Move to the next line after printing a row
   }
   
   // Print the vector of components
-  std::cout << "\nCONNECTION MATRIX COMPONENTS:\n";
+  std::cout << "\nCONNECTION MATRIX COMPONENTS:\n\n";
   int counter = 1;
 
-  for (const auto& component : added_components) {
-      std::cout << "\nIndex " << counter++ << ")\n";
-      component->print_data();  // Assuming print_data is a method of the Component class
-      print_vspace();
+  for (const std::shared_ptr<Component>& component : added_components) {
+    // print which component is which index
+      std::cout << "Index " << counter << ") " 
+                << component->get_name() << std::endl; 
+      counter += 1;
   }
+
+  print_vspace();
 
 }
 
