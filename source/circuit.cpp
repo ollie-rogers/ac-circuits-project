@@ -166,11 +166,11 @@ void Circuit::print_data() const
 {
   print_vspace();
   std::cout << "CIRCUIT DATA:\n"
-            << "Impedance Magnitude: " 
+            << " # Impedance Magnitude: " 
             <<  std::abs(impedance) << " Ohms"
-            << "\nPhase Shift: " 
+            << "\n # Phase Shift: " 
             << std::arg(impedance) << " radians"
-            << "\nMemory Location: " << this << std::endl;
+            << "\n # Memory Location: " << this << std::endl;
 
   // Print the connection matrix
   std::cout << "\nCONNECTION MATRIX:\n";

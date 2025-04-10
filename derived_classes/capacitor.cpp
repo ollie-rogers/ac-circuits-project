@@ -88,12 +88,12 @@ double Capacitor::get_phase_difference() const
 
 void Capacitor::print_data() const
 {
-  std::cout << "Name: " << get_name()
-            << "\nMemroy Location: " << this
-            << "\nCapacitance: " << get_capacitance()
+  std::cout << " # Name: " << get_name()
+            << "\n # Memroy Location: " << this
+            << "\n # Capacitance: " << get_capacitance()
             << " F\n"
-            << "Impedance Magnitude: " << get_impedance_magnitude()
-            << " Ohms\nPhase Shift: "
+            << " # Impedance Magnitude: " << get_impedance_magnitude()
+            << " Ohms\n # Phase Shift: "
             << get_phase_difference() << " radians"
             << std::endl; // call message
 } 

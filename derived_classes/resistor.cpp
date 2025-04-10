@@ -84,12 +84,12 @@ double Resistor::get_phase_difference() const
 
 void Resistor::print_data() const
 {
-  std::cout << "Name: " << get_name()
-            << "\nMemroy Location: " << this
-            << "\nResistance: " << get_resistance()
+  std::cout << " # Name: " << get_name()
+            << "\n # Memroy Location: " << this
+            << "\n # Resistance: " << get_resistance()
             << " Ohms\n"
-            << "Impedance Magnitude: " << get_impedance_magnitude()
-            << " Ohms\nPhase Shift: "
+            << " # Impedance Magnitude: " << get_impedance_magnitude()
+            << " Ohms\n # Phase Shift: "
             << get_phase_difference() << " radians"
             << std::endl; // call message
 } 

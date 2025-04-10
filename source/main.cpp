@@ -127,7 +127,7 @@ void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits
   int counter = 1; // initialising variable to label number of component
 
   for (const std::unique_ptr<Circuit>& circuit : circuits) {
-    std::cout << "\n" << counter << ") " 
+    std::cout << "\nCIRCUIT " << counter << ") " 
               << std::endl; // label component number in library
     circuit->print_data(); // print data of component
     counter += 1;

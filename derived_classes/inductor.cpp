@@ -88,12 +88,12 @@ double Inductor::get_phase_difference() const
 
 void Inductor::print_data() const
 {
-  std::cout << "Name: " << get_name()
-            << "\nMemroy Location: " << this
-            << "\nInductance: " << get_inductance()
+  std::cout << " # Name: " << get_name()
+            << "\n # Memroy Location: " << this
+            << "\n # Inductance: " << get_inductance()
             << " H\n"
-            << "Impedance Magnitude: " << get_impedance_magnitude()
-            << " Ohms\nPhase Shift: "
+            << " # Impedance Magnitude: " << get_impedance_magnitude()
+            << " Ohms\n # Phase Shift: "
             << get_phase_difference() << " radians"
             << std::endl; // call message
 } 
