@@ -79,11 +79,11 @@ void read_components(const std::string& filename, std::vector<std::shared_ptr<Co
 
       // Create smart pointers and add to vector
       if (type == "Resistor") { 
-          components.push_back(std::make_unique<Resistor>(name, FREQUENCY, value)); // add resistor
+          components.push_back(std::make_shared<Resistor>(name, FREQUENCY, value)); // add resistor
       } else if (type == "Capacitor") {
-          components.push_back(std::make_unique<Capacitor>(name, FREQUENCY, value)); // add capacitor
+          components.push_back(std::make_shared<Capacitor>(name, FREQUENCY, value)); // add capacitor
       } else if (type == "Inductor") {
-          components.push_back(std::make_unique<Inductor>(name, FREQUENCY, value)); // add inductor
+          components.push_back(std::make_shared<Inductor>(name, FREQUENCY, value)); // add inductor
       }
   }
 
