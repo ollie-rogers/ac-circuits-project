@@ -40,6 +40,12 @@ Circuit::~Circuit()
 }
 
 
+std::vector<std::shared_ptr<Component>> Circuit::get_added_components() const
+{
+  return added_components;
+}
+
+
 void Circuit::add_series(std::shared_ptr<Component>& component) 
 {
   /* Parameters:

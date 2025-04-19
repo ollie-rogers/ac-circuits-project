@@ -32,6 +32,9 @@ public:
 
   ~Circuit(); // defining destructor
 
+  // defining getter for the added components vector
+  std::vector<std::shared_ptr<Component>> get_added_components() const;
+
   /* Defining functions to add components in series or parellel */
   void add_series(std::shared_ptr<Component>& component);
   void add_parallel(std::shared_ptr<Component>& component);

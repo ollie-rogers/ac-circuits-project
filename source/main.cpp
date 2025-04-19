@@ -190,6 +190,60 @@ int choose_component(std::vector<std::shared_ptr<Component>>& components)
 }
 
 
+int choose_remove_component(std::unique_ptr<Circuit>& circuit)
+{
+  std::string component_choice_str;
+  int component_choice_int = -995; 
+
+  while(true)
+  {
+    std::cout << "\nEnter Component Index to Remove: " << std::endl;
+    std::cin >> component_choice_str;
+
+    try 
+    { // try converting the input to an integer
+      component_choice_int = std::stoi(component_choice_str);  
+    } 
+    catch (const std::invalid_argument& e) 
+    {
+      std::cout << "Invalid input. Please enter a valid number." << std::endl;
+    }
+    
+    std::vector<std::shared_ptr<Component>> added_components = circuit->get_added_components();
+    // store size of library vector as size to check if integer input in range
+    int size = static_cast<int>(added_components.size()); // make sure its a signed integer
+
+    if(component_choice_int - 1 >= size) // check if right size
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too high."
+                 << " Please choose integer in library" << std::endl;
+    } 
+    
+    else if(component_choice_int <= 0 && component_choice_int != -995)
+    {
+      std::cin.clear();  // clear a failed state
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+      std::cout << "Input too low."
+      << " Please choose integer in library" << std::endl;
+    }
+
+    else if(component_choice_int == -995) // will be this if the input wasnt integer
+    {
+      // do nothing (already printed error)
+    }
+
+    else
+    {
+      break;
+    }
+  }
+
+  return component_choice_int;
+}
+
+
 void add_component(std::unique_ptr<Circuit>& circuit, std::shared_ptr<Component>& component)
 {
   std::string choice;
@@ -419,6 +473,25 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
       print_component_library(components);
     }
 
+    else if(user_input == "r")
+    {
+      std::vector<std::shared_ptr<Component>> added_components = circuit->get_added_components();
+      int num_of_components = added_components.size();
+
+      if (num_of_components > 0)
+      {
+        circuit->print_data(); // print the current circuit info
+        int remove_component_index = choose_remove_component(circuit);
+        std::cout << "Choice: " << remove_component_index << std::endl;
+      }
+      else
+      {
+        std::cout << "Add some components first!" << std::endl;
+        std::cout << "Press i to see the circuit. " 
+                  << "It probably has nothing in it" << std::endl;
+      }
+    }
+
     else if(user_input == "a") // if choose to add a component
     {
       // ask the user which component they would like to add
@@ -430,8 +503,7 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
         // then add it in series
         circuit->add_series(components[component_index-1]);
         check_if_first_component += 1;
-      }
-      
+      }      
       else 
       { // otherwise, ask user how they whether to add in s/p
       add_component(circuit, components[component_index-1]);
