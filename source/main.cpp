@@ -45,7 +45,7 @@ void print_user_guide()
   std::cout << "h\t\tDisplay user guide" << std::endl;
   std::cout << "c\t\tCreate a new circuit (Basic)" << std::endl;
   std::cout << "e\t\tEdit a circuit (Basic)" << std::endl;
-  std::cout << "C\t\tOpen complex circuit editor" << std::endl;
+  std::cout << "k\t\tOpen complex circuit editor" << std::endl;
   std::cout << "g\t\tDisplay component library" << std::endl;
   std::cout << "q\t\tDisplay circuit library" << std::endl;
   std::cout << "x\t\tExit the program" << std::endl;
@@ -376,6 +376,7 @@ void complex_circuit_editor_guide()
   std::cout << "r\t\tRemove component" << std::endl;
   std::cout << "n\t\tAdd nested circuit" << std::endl;
   std::cout << "i\t\tDisplay current circuit info" << std::endl;
+  std::cout << "g\t\tDisplay component library" << std::endl;
   std::cout << "x\t\tExit the circuit editor" << std::endl;
 }
 
@@ -385,45 +386,71 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
   complex_circuit_editor_guide();
   // Your program will now just wait for the user input
   std::string user_input;
+  /* Tnitialise integer to check if adding first component.
+  If so, we want to add in series (avoid dividing by 0)
+  Add 1 every time use add function. */
+  int check_if_first_component = 0;
 
   while (true) 
   {
-    // Wait for user input. The program will pause here.
-    print_dash();
-    std::cout << " " << std::endl;
-    std::cin >> user_input;
+    // Wait for user input here for user input
+    print_dash(); // formatting
+    std::cout << " " << std::endl; // to allow for an input
+    std::cin >> user_input; // wait for input
 
-    if(user_input == "h")
+    if(user_input == "h") // if choose the help guide
     {
-      complex_circuit_editor_guide();
+      complex_circuit_editor_guide(); // print the help guide
     }
 
-    else if(user_input == "i") // if user inputs g
+    else if(user_input == "i") // if choose to print circuit info
     {
-      circuit->print_data(); // print the library
+      circuit->print_data(); // print the info of the circuit
     }
 
-    else if(user_input == "x") 
+    else if(user_input == "x") // if chose to exit the program
     {
-        // If 'e' is entered, exit the program
-        std::cout << "Exiting circuit editor." << std::endl;
-        break;  // Exit the loop and terminate the program
+      break;  // Then break the loop
     } 
 
-    else if(user_input == "a")
+    else if(user_input == "g") // if choose to display component library
     {
+      // display the component library
+      print_component_library(components);
+    }
+
+    else if(user_input == "a") // if choose to add a component
+    {
+      // ask the user which component they would like to add
       int component_index = choose_component(components);
+
+      /* If this is the first component being added */
+      if(check_if_first_component == 0)
+      {
+        // then add it in series
+        circuit->add_series(components[component_index-1]);
+        check_if_first_component += 1;
+      }
+      
+      else 
+      { // otherwise, ask user how they whether to add in s/p
       add_component(circuit, components[component_index-1]);
+      }
     }
 
     else 
     {
-      // If input is not 'c' or 'e', you can handle it here.
+      // If input is not given by the above
       std::cin.clear();  // clear a failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+
+      // prompt user to open the menu to help with what to do
       std::cout << "Invalid option. Refer to the circuit editor guide (h)" << std::endl;
     }
   }
+
+  circuit->print_data(); // print data when exit
+  std::cout << "Exiting circuit editor." << std::endl; // exit call message
 }
 
 
@@ -494,8 +521,9 @@ int main() {
       print_circuit_library(circuits);
     }
 
-    else if(user_input == "C")
+    else if(user_input == "k")
     {
+      print_dash();
       std::cout << "OPENING CIRCUIT EDITOR" << std::endl;
 
       // create a smart pointer to a circuit
@@ -531,264 +559,3 @@ int main() {
 
 
 
-
-
-// bool y_or_n_input_validity(std::string choice) {
-
-//   /* Checks whether the choice of whether to print the full list is of the right form.
-//   If of the right form returns true.
-//   If not of the right form, prints error message and returns false. */
-//   if (std::cin.fail() || std::cin.peek() != '\n') {
-//       error_message();
-//       return false;
-//   } else if (choice == "y" || choice == "n") {
-//       return true;
-//   } else {
-//       error_message();
-//       return false;
-//   }
-
-//   return false;
-// }
-
-
-// bool s_or_p_input_validity(std::string choice) {
-
-//   /* Checks whether the choice of whether to print the full list is of the right form.
-//   If of the right form returns true.
-//   If not of the right form, prints error message and returns false. */
-//   if (std::cin.fail() || std::cin.peek() != '\n') {
-//       error_message();
-//       return false;
-//   } else if (choice == "s" || choice == "p") {
-//       return true;
-//   } else {
-//       error_message();
-//       return false;
-//   }
-
-//   return false;
-// }
-
-
-// bool int_input_validity(std::string choice) {
-
-//   /* Checks whether the choice of whether to print the full list is of the right form.
-//   If of the right form returns true.
-//   If not of the right form, prints error message and returns false. */
-//   if (std::cin.fail() || std::cin.peek() != '\n') 
-//   {
-//       error_message();
-//       return false;
-//   }    
-
-//   try 
-//   { // try converting the input to an integer
-//     std::stoi(choice);  
-//     return true; // If successful, return true
-//   } 
-//   catch (const std::invalid_argument& e) 
-//   {
-//     // If it throws an exception, not an integer
-//     error_message(); // print an error message
-//     return false; // unsuccesful, so return false
-//   }
-
-//   return false;
-// }  
-
-
-
-
-// void create_circuit_old_oldest(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
-//{
-  /* Parameters:
-   - circuit (smart pointer to a circuit object)
-   - components (vector of smart pointers to arbitrary components) 
-   Aims:
-   - Iterate through the vector of components
-   - For each component, ask the user to add in series or parallel 
-   - Uses add_series and add_parallel functions to modify impedance od circuit */
-
-//  print_dash(); // for readability
-
-//  for (const std::unique_ptr<Component>& component : components) {
-
-//    print_vspace(); // space for readability
-
-//    component->print_data(); // prints data of component
-
-//    bool input_iterator = false; // creating a boolean to check if input valid
-//    std::string series_or_parallel; // creating a string to store user input of choice
-
-//    while(input_iterator == false)
-//    {
-//      print_vspace(); // for readability
-
-//      std::cout << "How would you like to add this component: Series / Parallel? (s/p)" 
-//      << std::endl; // asking for user input on how to add the component
-
-//      std::cin >> series_or_parallel; // assigns user input to variable
-
-//      input_iterator = s_or_p_input_validity(series_or_parallel); // checks to see if valid input
-
-//    } // breaks if valid input
-
-//    if(series_or_parallel == "s") // if user chose to add in series
-//    {
-//      circuit->add_series(component); // use add_series to modify circuit
-//    }
-//    else if(series_or_parallel == "p") // if user chose to add in parallel
-//    {
-//      circuit->add_parallel(component); // use add_parallel to modify circuit
-//    }
-
-//  }
-//}
-
-
-
-// void create_circuit_old(std::unique_ptr<Circuit>& circuit, const std::vector<std::unique_ptr<Component>>& components)
-// {
-//   std::cout << "\nCREATING CIRCUIT:" << std::endl; // call message
-
-//   bool choice_validity = false; // initialising variable to loop until choice is valid
-//   std::string component_choice_str; // initialising variable for choosing component to add
-//   int component_choice_int; // initialising integer version
-
-//   while(choice_validity == false)
-//   {
-//     std::cout << "\nWhich component would you like add first?"
-//               << "\nNote: first component always adds in series"
-//               << "\nPlease choose a number (1, 2, 3... given in library)" << std::endl;
-//     std::cin >> component_choice_str;
-
-//     choice_validity = int_input_validity(component_choice_str);
-      
-//     if(choice_validity == true)
-//     {
-//       component_choice_int = std::stoi(component_choice_str);
-        
-//       // store size of library vector as size to check if integer input in range
-//       int size = static_cast<int>(components.size()); // make sure its a signed integer
-
-//       if(component_choice_int - 1 >= size) // check if right size
-//       {
-//         choice_validity = false;
-//         std::cout << "Input too high."
-//                   << "Please choose integer in library" << std::endl;
-//       } 
-//       else if(component_choice_int <= 0)
-//       {
-//         choice_validity = false;
-//         std::cout << "Input too low."
-//         << "Please choose integer in library" << std::endl;
-//       }
-//     }
-//   }
-
-//   // first component must always add in series
-//   circuit->add_series(components[component_choice_int-1]);
-
-//   // initialise variable to loop until series or parallel choice is valid
-//   bool choice_yn_validity = false; 
-//   // initialise variable to store choice of series or parallel
-//   std::string choice_to_add_another;
-
-//   while(choice_yn_validity == false) // while input is invalid
-//   {
-//     std::cout << "\nWould you like to add another component? (y/n)" << std::endl;
-//     std::cin >> choice_to_add_another;
-//     choice_yn_validity = y_or_n_input_validity(choice_to_add_another);    
-//   } // break if
-
-//   if(choice_to_add_another =="y")
-//   {
-
-//     // defining boolean variable to iterate until choose not to add any more components
-//     bool choose_to_exit = false; 
-
-//     while(choose_to_exit == false) // iterates until choose not to add any more
-//     {
-//       bool choice_validity = false; // initialising variable to loop until choice is valid
-//       std::string component_choice_str; // initialising variable for choosing component to add
-//       int component_choice_int; // initialising integer version
-
-//       while(choice_validity == false)
-//       {
-//         std::cout << "\nWhich component would you like to add next?"
-//                   << "\nPlease choose a number (1, 2, 3... given in library)" << std::endl;
-//         std::cin >> component_choice_str;
-
-//         choice_validity = int_input_validity(component_choice_str);
-
-//         if(choice_validity == true)
-//         {
-//           component_choice_int = std::stoi(component_choice_str);
-          
-//           // store size of library vector as size to check if integer input in range
-//           int size = static_cast<int>(components.size()); // make sure its a signed integer
-
-//           if(component_choice_int - 1 >= size) // check if right size
-//           {
-//             choice_validity = false;
-//             std::cout << "Input too high."
-//                       << "Please choose integer in library" << std::endl;
-//           } 
-//           else if(component_choice_int <= 0)
-//           {
-//             choice_validity = false;
-//             std::cout << "Input too low."
-//             << "Please choose integer in library" << std::endl;
-//           }
-//         }
-//       }
-        
-//       // initialise variable to loop until series or parallel choice is valid
-//       bool choice_sp_validity = false;
-//       // initialise variable to store choice of series or parallel
-//       std::string series_or_parallel;
-
-//       while(choice_sp_validity == false) // while input is invalid
-//       {
-//         std::cout << "\nWould you like to add in series or parallel?" << std::endl;
-//         std::cin >> series_or_parallel;
-//         choice_sp_validity = s_or_p_input_validity(series_or_parallel);
-//       } // break if choice is valid
-
-//       /*Next we actually add the component in series / parallel */
-
-//       if(series_or_parallel == "s") 
-//       {
-//         // if chose series, add chosen component in series
-//         circuit->add_series(components[component_choice_int-1]);
-//       }
-//       else if(series_or_parallel == "p")
-//       {
-//         // if chose parallel, add chosen component in parallel
-//         circuit->add_parallel(components[component_choice_int-1]);
-//       }
-
-//       /* Next we want to add the component accordingly */
-
-//       // initialise variable to loop until series or parallel choice is valid
-//       bool choice_yn_validity = false;
-//       // initialise variable to store choice of series or parallel
-//       std::string choice_to_add_another;
-      
-//       while(choice_yn_validity == false) // while input is invalid
-//       {
-//         std::cout << "\nWould you like to add another component? (y/n)" << std::endl;
-//         std::cin >> choice_to_add_another;
-//         choice_yn_validity = y_or_n_input_validity(choice_to_add_another);    
-//       } // break if choice is valid
-
-//       if(choice_to_add_another == "n")
-//       {
-//         choose_to_exit = true;
-//       }
-
-//     } // exit when choose to do so
-//   }
-
-// }
