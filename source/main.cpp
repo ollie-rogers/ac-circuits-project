@@ -481,15 +481,28 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
       if (num_of_components > 0)
       {
         circuit->print_data(); // print the current circuit info
+
+        // take user input for which component to remove
         int remove_component_index = choose_remove_component(circuit);
+
+        // print the choice to check
         std::cout << "Choice: " << remove_component_index << std::endl;
+
+        // use member funtion to remove the component
+        circuit->remove_component(remove_component_index);
+
+        // print info for the new circuit
+        std::cout << "New circuit info:" << std::endl;
+        circuit->print_data();
       }
+    
       else
       {
         std::cout << "Add some components first!" << std::endl;
         std::cout << "Press i to see the circuit. " 
                   << "It probably has nothing in it" << std::endl;
       }
+
     }
 
     else if(user_input == "a") // if choose to add a component

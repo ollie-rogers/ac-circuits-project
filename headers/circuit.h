@@ -38,6 +38,7 @@ public:
   /* Defining functions to add components in series or parellel */
   void add_series(std::shared_ptr<Component>& component);
   void add_parallel(std::shared_ptr<Component>& component);
+  void remove_component(int component_index);
 
   void print_data() const; // defining a print data function
 

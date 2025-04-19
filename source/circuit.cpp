@@ -167,6 +167,24 @@ void Circuit::add_parallel(std::shared_ptr<Component>& component)
 
 }
 
+void Circuit::remove_component(int component_index)
+{
+  std::cout << "Calling Component Remover: " 
+            << "\nRemoving: " << added_components[component_index - 1]->get_name() << std::endl; // call message
+
+  // erase component from the vector of components
+  added_components.erase(added_components.begin() + (component_index - 1));
+  
+  // Remove the row from the connection matrix
+  connection_matrix.erase(connection_matrix.begin() + (component_index - 1));
+        
+  // Remove the column - for each row, remove the index corresponding to the component
+  for (auto& row : connection_matrix) {
+    row.erase(row.begin() + (component_index - 1));
+  }
+
+}
+
 
 void Circuit::print_data() const
 {
