@@ -167,6 +167,55 @@ void Circuit::add_parallel(std::shared_ptr<Component>& component)
 
 }
 
+
+void Circuit::calculate_impedance_from_connection_matrix()
+{
+  impedance = 0; // set the impedance to back zero
+  int index = 0; // create an index
+
+  std::vector<int> first_row = connection_matrix[0]; // take the first row
+  int length = first_row.size(); // find its length
+
+  // add impedance of first component in series
+  impedance += added_components[0]->get_impedance();
+
+  while(index < length) // whilst still in the first row
+  {
+    std::shared_ptr<Component> the_component = added_components[index]; // get the component
+    int connection_type = first_row[index]; // get how it was connected
+
+    if(connection_type == 2) // if added in parallel
+    {
+      // Define complex number 1
+      std::complex<double> one(1.0, 0.0);
+      
+      // First use getter to get impedance of added component
+      std::complex<double> component_impedance = the_component->get_impedance();
+
+      // Add the reciprocals of the impedances
+      std::complex<double> reciprocal = (one/impedance) + (one/component_impedance);
+
+      // Convert Reciprocal to impedance
+      impedance = one/reciprocal;
+    }
+    else if(connection_type == 1) // if added in series
+    {
+      // First, use getter to get impedance of added component
+      std::complex<double> component_impedance = the_component->get_impedance(); 
+
+      // add it to the original impedance
+      impedance += component_impedance; // modifies impedance
+    }
+    else
+    {
+      // no connection, dont modify impedance
+    }
+    index += 1; // go to the next component
+  }
+}
+
+
+
 void Circuit::remove_component(int component_index)
 {
   std::cout << "Calling Component Remover: " 

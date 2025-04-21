@@ -437,6 +437,7 @@ void complex_circuit_editor_guide()
 
 void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components, std::unique_ptr<Circuit>& circuit) 
 {
+
   complex_circuit_editor_guide();
   // Your program will now just wait for the user input
   std::string user_input;
@@ -490,6 +491,7 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
 
         // use member funtion to remove the component
         circuit->remove_component(remove_component_index);
+        circuit->calculate_impedance_from_connection_matrix();
 
         // print info for the new circuit
         std::cout << "New circuit info:" << std::endl;
@@ -608,19 +610,59 @@ int main() {
 
     else if(user_input == "k")
     {
-      print_dash();
-      std::cout << "OPENING CIRCUIT EDITOR" << std::endl;
+      print_dash(); // formatting
+      std::cout << "OPENING CIRCUIT EDITOR" << std::endl; // call message
 
-      // create a smart pointer to a circuit
-      std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
+      std::string input; // define variable for user input
 
-      // ask user to build circuit with components
-      // create_circuit_old(circuit, components); (old create circtui function)
-      complex_circuit_editor(components, circuit);
+      while(true)
+      {
+        std::cout << "Would you like to create a new circuit"
+        << " or edit an existing circuit (c/e)" << std::endl;
+        std::cin >> input;
 
-      // add circuit to circuit library
-      circuits.push_back(std::move(circuit)); 
+        if(input == "c" || input == "C") // if choose to create new circuit
+        {
+          // create a smart pointer to a circuit
+          std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
+          // open the complex circuit editor
+          complex_circuit_editor(components, circuit);
+
+          // add the new circuit to circuit library
+          circuits.push_back(std::move(circuit)); 
+
+          break; // break the loop
+        }
+
+        else if(input == "e" || input == "E") // if choose to edit a circuit
+        {
+          if(circuits.size() == 0) // check if the circuits vector has any circuits
+          {
+            std::cout << "No circuits have been created.\n"
+                      << "To edit a circuit - you must make one." << std::endl;
+            // if not circuits created, print the message above
+          }
+          else
+          {
+            print_circuit_library(circuits);
+            // asks which circuit user would like to edit
+            std::cout << "Which circuit would you like to edit? (see library)" << std::endl;
+            int circuit_index = choose_circuit(circuits);
+
+            // open the complex circuit editor
+            complex_circuit_editor(components, circuits[circuit_index - 1]);
+          }
+          break; // break the loop
+        }
+        else 
+        {
+          // If input is not 'c' or 'e', you can handle it here.
+          std::cin.clear();  // clear a failed state
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
+          std::cout << "Invalid option." << std::endl;
+        }
+      }
     }
 
     else 
