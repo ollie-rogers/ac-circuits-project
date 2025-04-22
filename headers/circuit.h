@@ -18,10 +18,19 @@ class Circuit {
 protected:
 
   std::complex<double> impedance;  // stores the impedance of the whole circuit
-  std::vector<std::vector<int>> connection_matrix; // Empty matrix initially
-  std::vector<std::shared_ptr<Component>> added_components;  // To store added components
-  // const because we don't want to be editing the Components
 
+  /* Defining "connection matrix" to store the connection of each component
+   - Each row and column represent a component (same index)
+   - 0 means not connected
+   - 1 means connected in series
+   - 2 means connected in parallel 
+     - good sense check is diagonal always zero (cannot be connected to itself) 
+   - From this, circuits can be easily reproduced */
+  std::vector<std::vector<int>> connection_matrix; 
+
+  /* However, we also need to know what each row and column is
+  So we need a vector of the added components */
+  std::vector<std::shared_ptr<Component>> added_components;
 
 public:
 

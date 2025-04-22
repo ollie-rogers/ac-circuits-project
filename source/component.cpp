@@ -29,14 +29,14 @@ Component::~Component()
   print_vspace(); // space for readability
   std::cout << "Calling Component Destructor:\n"
             << "Destroying: " << get_name() << std::endl;
-  // INSERT CLEANUP CODE HERE IF NEEDED
+  // no memory cleanup required
 }
 
 
 // Define getter for the name of component, const as doesnt edit the value (for clarity)
 std::string Component::get_name() const
 {
-  return name;
+  return name; // return the name
 }
 
 

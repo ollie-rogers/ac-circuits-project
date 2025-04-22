@@ -22,7 +22,7 @@ public:
 
   virtual ~Component(); // desctructor for base class
 
-  // defining purely vitrual setter for the frequency (const = 0 so pure virtual)
+  // defining purely vitrual setter for the frequency
   virtual void set_frequency(double new_frequency) = 0; 
 
   // Default getter for name, this does not need to be overriden in derived classes
@@ -30,7 +30,7 @@ public:
   
   /* Defining purely vitrual getter for the frequency, impedance (complex), 
   the magnitude of the impedance (real) and the phase difference (real).*/
-  virtual double get_frequency() const = 0; // use of const = 0 makes these pure virtual
+  virtual double get_frequency() const = 0; 
   virtual std::complex<double> get_impedance() const = 0;
   virtual double get_impedance_magnitude() const = 0;
   virtual double get_phase_difference() const = 0;

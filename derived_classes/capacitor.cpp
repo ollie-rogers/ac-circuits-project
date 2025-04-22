@@ -9,19 +9,17 @@
 // Default constructor for Capacitor, calls base Component default constructor
 Capacitor::Capacitor() : Component(), capacitance(0.0) 
 {
-  print_vspace(); // space for readability
-  std::cout << "Calling Default Capacitor Constructor\nConstructing: " 
+  std::cout << "\nCalling Default Capacitor Constructor\nConstructing: " 
             << get_name() << std::endl; // call message
 }
 
 
-/* Paramaterized contructor. Constructs capacitor by calling base component constructor and
-setting capacitance. */ 
+/* Paramaterized contructor. Constructs capacitor by calling base component 
+constructor and setting capacitance. */ 
 Capacitor::Capacitor(std::string r_name, double r_frequency, double capacitance)
   : Component(r_name, r_frequency), capacitance(capacitance)
   {
-    print_vspace(); // space for readability
-    std::cout << "Calling Capacitor Constructor\nConstructing: " 
+    std::cout << "\nCalling Capacitor Constructor\nConstructing: " 
               << get_name() << std::endl; // call message
   }
 
@@ -29,18 +27,16 @@ Capacitor::Capacitor(std::string r_name, double r_frequency, double capacitance)
 // Destructor for the capacitor subclass
 Capacitor::~Capacitor() 
 {
-  print_vspace(); // space for readability
-  std::cout << "Calling Capacitor Destructor:\nDestroying: "
+  std::cout << "\nCalling Capacitor Destructor:\nDestroying: "
             << get_name() << std::endl; // call message
-  // INSERT CLEANUP CODE HERE
+  // no memory cleanup required
 }
 
 
 // Overriding the setter for frequency
 void Capacitor::set_frequency(double new_frequency)
 {
-  print_vspace();
-  std::cout << "Setting new frequency: " 
+  std::cout << "\nSetting new frequency: " 
             << new_frequency << "Hz" << std::endl; // call message
   frequency = new_frequency; // setting new frequency
 }
@@ -49,14 +45,14 @@ void Capacitor::set_frequency(double new_frequency)
 // Defining a getter for the capacitance
 double Capacitor::get_capacitance() const
 {
-  return capacitance;
+  return capacitance; // return the capacitance
 }
 
 
 /* Overriding all the getters */
 double Capacitor::get_frequency() const
 {
-  return frequency;
+  return frequency; // return the frequency
 }
 
 
@@ -88,6 +84,8 @@ double Capacitor::get_phase_difference() const
 
 void Capacitor::print_data() const
 {
+  /* Prints the name, memory location, capacitance,
+  impedance magnitude, phase difference. */
   std::cout << " # Name: " << get_name()
             << "\n # Memroy Location: " << this
             << "\n # Capacitance: " << get_capacitance()
