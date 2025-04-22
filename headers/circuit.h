@@ -48,14 +48,15 @@ public:
   void add_series(std::shared_ptr<Component>& component);
   void add_parallel(std::shared_ptr<Component>& component);
 
-  /* Defining function to calculate the impedance from the connection matrix */
-  void calculate_impedance_from_connection_matrix();
+  /* Defining a function which can calculate the impedance for any circuit 
+  Uses the connection matrix */
+  void calculate_impedance();
 
   /* Defining a function to remove a component, modify the connection
   matrix accordingly and recalculate the impedance */
   void remove_component(int component_index);
 
-  void print_data() const; // defining a print data function
+  void print_data() const; // defining a function to print the data
 
 };
 

@@ -14,8 +14,7 @@
 // Default constructor definition
 Circuit::Circuit() : impedance(std::complex<double> (0.0, 0.0))
 {
-    print_vspace(); // space for readability
-    std::cout << "Calling Default Circuit Constructor\n" 
+    std::cout << "\nCalling Default Circuit Constructor\n" 
               << "Memory Location: " << this << std::endl; // call message
 }
 
@@ -24,8 +23,7 @@ Circuit::Circuit() : impedance(std::complex<double> (0.0, 0.0))
 Circuit::Circuit(std::complex<double> impedance)
     : impedance(impedance) 
     {
-      print_vspace(); // space for readability
-      std::cout << "Calling Component Constructor\nConstructing: " 
+      std::cout << "\nCalling Component Constructor\nConstructing: " 
                 << std::endl; // call message
     }
 
@@ -36,26 +34,26 @@ Circuit::~Circuit()
   print_vspace(); // space for readability
   std::cout << "Calling Circuit Destructor:\n"
             << "Destroying: " << this << std::endl; // call message
-  // INSERT CLEANUP CODE HERE IF NEEDED
+  // no memory cleanup needed
 }
 
 
 std::vector<std::shared_ptr<Component>> Circuit::get_added_components() const
 {
-  return added_components;
+  return added_components; // return the added components vector
 }
 
 
 void Circuit::add_series(std::shared_ptr<Component>& component) 
 {
   /* Parameters:
-   - component (smart pointer to an arbitrary component)
-   Aims:
-   - add the component in series with original circuit
-   - modify the impedance of the circuit accordingly */
+  i) component (smart pointer to an arbitrary component)
+  Aims: (to add the new component in series with whole circuit)
+  i) Modify the impedance of the circuit accordingly
+  ii) Modify the connection matrix with the new component
+  iii) Add the component to the components vector */
   
-  print_vspace();
-  std::cout << "Calling Series Adder Function: " 
+  std::cout << "\nCalling Series Adder Function: " 
             << "\nAdding Component: " << component->get_name() 
             << std::endl; // call message
 
@@ -65,57 +63,60 @@ void Circuit::add_series(std::shared_ptr<Component>& component)
   // add it to the original impedance
   impedance += component_impedance; // modifies impedance
 
-  /* Next we need to store how we added this component:
-   - To do this, we need to first store the added component. */
+  /* Next we need to store the added component 
+  We add it to the vector of components */
   added_components.push_back(component);
 
   // Resize the matrix to add a new row and column
   size_t new_size = connection_matrix.size() + 1;  // New size for the matrix
 
-
   // Resize existing rows to add a new column
-  for (auto& row : connection_matrix) {
+  for (auto& row : connection_matrix) 
+  {
     row.resize(new_size, 0);
   }
 
-  // Add the new row
+  // Add the new row filled with zeros
   connection_matrix.push_back(std::vector<int>(new_size, 0));
 
+  // Define the index of the last row and column
   int column_row_index = new_size - 1;
+
+  // Define a counter for the columns
   int j_counter = 0;
   
-  while(j_counter < column_row_index)
+  while(j_counter < column_row_index) // whilst the counter is less than length of a column
   {
-    connection_matrix[column_row_index][j_counter] = 1;
-    j_counter += 1;
+    connection_matrix[column_row_index][j_counter] = 1; // set the element to 1 for series
+    j_counter += 1; // go to the next element in column
   }
   
+  // Define a counter for the rows
   int i_counter = 0;
   
-  while(i_counter < column_row_index)
+  while(i_counter < column_row_index) // whilst the counter is less than length of a row
   {
-    connection_matrix[i_counter][column_row_index] = 1;
-    i_counter += 1;
+    connection_matrix[i_counter][column_row_index] = 1; // set the element to 1 for series
+    i_counter += 1; // go to next element in the row
   }
   
-  // add zero on diagonal as cant be connected to itself
+  // add zero on the diagonal (as cant be connected to itself)
   connection_matrix[column_row_index][column_row_index] = 0; 
-
 }
 
 
 void Circuit::add_parallel(std::shared_ptr<Component>& component)
 {
   /* Parameters:
-   - component (smart pointer to an arbitrary component)
-   Aims:
-   - Add the component in parallel with original circuit
-   - modify the impedance accordingly */
+  i) component (smart pointer to an arbitrary component)
+  Aims: (to add the new component in parallel with whole circuit)
+  i) Modify the impedance of the circuit accordingly
+  ii) Modify the connection matrix with the new component
+  iii) Add the component to the components vector */
   
-   print_vspace();
-   std::cout << "Calling Parallel Adder Function: " 
-             << "\nAdding Component: " << component->get_name() 
-             << std::endl; // call message
+  std::cout << "\nCalling Parallel Adder Function: " 
+            << "\nAdding Component: " << component->get_name() 
+            << std::endl; // call message
 
   // Define complex number 1
   std::complex<double> one(1.0, 0.0);
@@ -126,65 +127,82 @@ void Circuit::add_parallel(std::shared_ptr<Component>& component)
   // Add the reciprocals of the impedances
   std::complex<double> reciprocal = (one/impedance) + (one/component_impedance);
 
-  // Convert Reciprocal to impedance
+  // Then change the impedance using the reciprocal
   impedance = one/reciprocal;
 
-  /* Next we need to store how we added this component:
-   - To do this, we need to first store the added component. */
-   added_components.push_back(component);
+  /* Next we need to store the added component
+  We add it to the vector of components */
+  added_components.push_back(component);
 
-   // Resize the matrix to add a new row and column
-   size_t new_size = connection_matrix.size() + 1;  // New size for the matrix
+  // Resize the matrix to add a new row and column
+  size_t new_size = connection_matrix.size() + 1;  // New size for the matrix
  
  
-   // Resize existing rows to add a new column
-   for (auto& row : connection_matrix) {
-     row.resize(new_size, 0);
-   }
+  // Resize existing rows to add a new column
+  for (auto& row : connection_matrix)
+  {
+    row.resize(new_size, 0);
+  }
  
-   // Add the new row
-   connection_matrix.push_back(std::vector<int>(new_size, 0));
+  // Add the new row
+  connection_matrix.push_back(std::vector<int>(new_size, 0));
  
-   int column_row_index = new_size - 1;
-   int j_counter = 0;
-   
-   while(j_counter < column_row_index)
-   {
-     connection_matrix[column_row_index][j_counter] = 2;
-     j_counter += 1;
-   }
-   
-   int i_counter = 0;
-   
-   while(i_counter < column_row_index)
-   {
-     connection_matrix[i_counter][column_row_index] = 2;
-     i_counter += 1;
-   }
-   
-   // add zero on diagonal as cant be connected to itself
-   connection_matrix[column_row_index][column_row_index] = 0; 
+  // Define the index of the last row and column
+  int column_row_index = new_size - 1;
+
+  // Define a counter for the columns
+  int j_counter = 0;
+  
+  while(j_counter < column_row_index) // whilst the counter is less than length of a column
+  {
+    connection_matrix[column_row_index][j_counter] = 2; // set the element to 1 for series
+    j_counter += 1; // go to the next element in column
+  }
+  
+  // Define a counter for the rows
+  int i_counter = 0;
+  
+  while(i_counter < column_row_index) // whilst the counter is less than length of a row
+  {
+    connection_matrix[i_counter][column_row_index] = 2; // set the element to 1 for series
+    i_counter += 1; // go to next element in the row
+  }
+  
+  // add zero on the diagonal (as cant be connected to itself)
+  connection_matrix[column_row_index][column_row_index] = 0; 
 
 }
 
 
-void Circuit::calculate_impedance_from_connection_matrix()
+void Circuit::calculate_impedance()
 {
-  impedance = 0; // set the impedance to back zero
+  /* Parameters:
+  i) None (all information needed to calculate impedance is stored in 
+     connection matrix and the vector of components)
+  Aims: (to calculate the impedance of the whole circuit)
+  i) Use the first row of the connection matrix
+  ii) And the added components vector
+  iii) To determine how each component was added
+       and in what order
+  iv) Add impedances step by step accordingly */
+
+  impedance = 0; // make sure the impedance is initially zero
   int index = 0; // create an index
 
   std::vector<int> first_row = connection_matrix[0]; // take the first row
   int length = first_row.size(); // find its length
 
-  // add impedance of first component in series
+  /* Add impedance of first component in series 
+  (cant be in parallel if no other components)*/ 
   impedance += added_components[0]->get_impedance();
 
-  while(index < length) // whilst still in the first row
+  while(index < length) // whilst in the first row
   {
-    std::shared_ptr<Component> the_component = added_components[index]; // get the component
-    int connection_type = first_row[index]; // get how it was connected
+    // get the component from the added components vector
+    std::shared_ptr<Component> the_component = added_components[index]; 
+    int connection_type = first_row[index]; // get how it was connected (0, 1, 2)
 
-    if(connection_type == 2) // if added in parallel
+    if(connection_type == 2) // if added in parallel, update impedance
     {
       // Define complex number 1
       std::complex<double> one(1.0, 0.0);
@@ -198,7 +216,7 @@ void Circuit::calculate_impedance_from_connection_matrix()
       // Convert Reciprocal to impedance
       impedance = one/reciprocal;
     }
-    else if(connection_type == 1) // if added in series
+    else if(connection_type == 1) // if added in series, update impedance
     {
       // First, use getter to get impedance of added component
       std::complex<double> component_impedance = the_component->get_impedance(); 
@@ -219,7 +237,9 @@ void Circuit::calculate_impedance_from_connection_matrix()
 void Circuit::remove_component(int component_index)
 {
   std::cout << "Calling Component Remover: " 
-            << "\nRemoving: " << added_components[component_index - 1]->get_name() << std::endl; // call message
+            << "\nRemoving: " 
+            << added_components[component_index - 1]->get_name() 
+            << std::endl; // call message
 
   // erase component from the vector of components
   added_components.erase(added_components.begin() + (component_index - 1));
@@ -227,51 +247,62 @@ void Circuit::remove_component(int component_index)
   // Remove the row from the connection matrix
   connection_matrix.erase(connection_matrix.begin() + (component_index - 1));
         
-  // Remove the column - for each row, remove the index corresponding to the component
-  for (auto& row : connection_matrix) {
+  // Remove the column
+  for (auto& row : connection_matrix) 
+  {
+    // for each row, remove the index corresponding to the component
     row.erase(row.begin() + (component_index - 1));
   }
-
 }
 
 
 void Circuit::print_data() const
 {
-  print_vspace();
-  std::cout << "CIRCUIT DATA:\n"
+  /* Prints:
+  i) the impedance magnitude
+  ii) phase shift 
+  iii) memory location 
+  iv) connection matrix
+  v) the vector of components */
+
+  std::cout << "\nCIRCUIT DATA:\n"
             << " # Impedance Magnitude: " 
-            <<  std::abs(impedance) << " Ohms"
+            <<  std::abs(impedance) << " Ohms" 
             << "\n # Phase Shift: " 
             << std::arg(impedance) << " radians"
             << "\n # Memory Location: " << this << std::endl;
 
-  // Print the connection matrix
+  /* Print the connection matrix */
   std::cout << "\nCONNECTION MATRIX:\n\n  ";
 
-  for (const auto& row : connection_matrix)
-  {
+  for (const auto& row : connection_matrix) // for each row
+  { 
 
-    for (const auto& value : row) 
+    for (const auto& value : row) // for each element in the row
     {
-      std::cout << value << " ";  // Print each matrix element
+      // Print the value and a space
+      std::cout << value << " ";
     }
     
-    std::cout << "\n  ";  // Move to the next line after printing a row
+    // Move to the next line after printing a row
+    std::cout << "\n  "; 
   }
   
-  // Print the vector of components
+  /* Print the vector of components */
   std::cout << "\nCONNECTION MATRIX COMPONENTS:\n\n";
-  int counter = 1;
 
-  for (const std::shared_ptr<Component>& component : added_components) {
+  int counter = 1; // counter to label index of each component
+
+  for (const std::shared_ptr<Component>& component : added_components) 
+  {
     // print which component is which index
-      std::cout << "Index " << counter << ") " 
-                << component->get_name() << std::endl; 
-      counter += 1;
+    std::cout << "Index " << counter << ") " 
+              << component->get_name() << std::endl; 
+
+    counter += 1; // next index
   }
 
-  print_vspace();
-
+  print_vspace(); // formatting
 }
 
 

@@ -491,7 +491,7 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
 
         // use member funtion to remove the component
         circuit->remove_component(remove_component_index);
-        circuit->calculate_impedance_from_connection_matrix();
+        circuit->calculate_impedance();
 
         // print info for the new circuit
         std::cout << "New circuit info:" << std::endl;
