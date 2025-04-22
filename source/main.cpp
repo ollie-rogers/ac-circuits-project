@@ -17,16 +17,6 @@ std::string FILE_NAME = "input_components.csv"; // defining the input file name
 double FREQUENCY = 50.0; // frequency of AC circuit in Hz (change accordingly)
 
 
-// void initial_statement()
-// {
-//   print_dash(); // for readability
-//   std::cout << "\nPROGRAM FUNCTIONALITY:\n" 
-//             << "\n - Reads in components from library\n" 
-//             << " - Takes user input to construct an arbitrary circuit\n"
-//             << std::endl; // print statement to explain the program
-// }
-
-
 void error_message() {
     
   //prints an error message if an input is of the wrong form
@@ -42,13 +32,13 @@ void print_user_guide()
 
   std::cout << "Command\t\tDescription" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
-  std::cout << "h\t\tDisplay user guide" << std::endl;
-  std::cout << "c\t\tCreate a new circuit (Basic)" << std::endl;
-  std::cout << "e\t\tEdit a circuit (Basic)" << std::endl;
-  std::cout << "k\t\tOpen complex circuit editor" << std::endl;
-  std::cout << "g\t\tDisplay component library" << std::endl;
-  std::cout << "q\t\tDisplay circuit library" << std::endl;
-  std::cout << "x\t\tExit the program" << std::endl;
+  std::cout << "help\t\tDisplay user guide" << std::endl;
+  std::cout << "create\t\tCreate a new circuit (Basic)" << std::endl;
+  std::cout << "edit\t\tEdit a circuit (Basic)" << std::endl;
+  std::cout << "editor\t\tOpen complex circuit editor" << std::endl;
+  std::cout << "components\tDisplay component library" << std::endl;
+  std::cout << "circuits\tDisplay circuit library" << std::endl;
+  std::cout << "exit\t\tExit the program" << std::endl;
 }
 
 
@@ -128,7 +118,7 @@ void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits
   int counter = 1; // initialising variable to label number of component
 
   for (const std::unique_ptr<Circuit>& circuit : circuits) {
-    std::cout << "\nCIRCUIT " << counter << ") " 
+    std::cout << "\n" << counter << ") " 
               << std::endl; // label component number in library
     circuit->print_data(); // print data of component
     counter += 1;
@@ -144,7 +134,7 @@ int choose_component(std::vector<std::shared_ptr<Component>>& components)
 
   while(true)
   {
-    std::cout << "\nEnter Component Number: " << std::endl;
+    std::cout << "\nEnter Component Number (1, 2, 3...): " << std::endl;
     std::cin >> component_choice_str;
 
     try 
@@ -287,8 +277,7 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, std::vector<std::shared_p
   while (true) 
   {
     // Wait for user input. The program will pause here.
-    print_dash();
-    std::cout << "Add another? (y/n) ";
+    std::cout << "\nAdd another? (y/n) ";
     std::cin >> add_another;
 
     if (add_another == "y") 
@@ -299,9 +288,8 @@ void create_circuit(std::unique_ptr<Circuit>& circuit, std::vector<std::shared_p
 
     else if (add_another == "n") 
     {
-        // If 'e' is entered, exit the program
-        std::cout << "Circuit Creation Complete" << std::endl;
-        break;  // Exit the loop and terminate the program
+      print_vspace();
+      break;  // Exit the loop and terminate the program
     } 
 
     else 
@@ -383,12 +371,11 @@ void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vect
   std::cout << "Which circuit would you like to edit? (see library)" << std::endl;
   int circuit_index = choose_circuit(circuits);
   std::string add_another;
+  print_component_library(components);
 
   while (true) 
   {
-    // Wait for user input. The program will pause here.
-    print_dash();
-    std::cout << "Add component? (y/n) ";
+    std::cout << "\nAdd component? (y/n) ";
     std::cin >> add_another;
     int component_index = 0; // define the component index
 
@@ -400,8 +387,7 @@ void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vect
 
     else if (add_another == "n") 
     {
-        // If 'e' is entered, exit the program
-        std::cout << "Circuit Editting Complete" << std::endl;
+        print_vspace();
         break;  // Exit the loop and terminate the program
     } 
 
@@ -537,80 +523,121 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
   }
 
   circuit->print_data(); // print data when exit
-  std::cout << "Exiting circuit editor." << std::endl; // exit call message
+}
+
+
+void return_statement()
+{ 
+  // prints statement to let user know returning to home
+  std::cout << "\nReturning to home." << std::endl; 
+
+  print_user_guide(); // prin the user guide
 }
 
 
 int main() {
 
-//  initial_statement(); // output to explain program
-
-  /* Create a vector of smart pointers to arbitrary components */
+  /* Create a vector of smart pointers to store the components */
   std::vector<std::shared_ptr<Component>> components;
+
+  /* Create a vector of smart pointers to store the circuits */
   std::vector<std::unique_ptr<Circuit>> circuits;
 
-  read_components(FILE_NAME, components); // read components from file, add to vector
+  // read in the components from the file and add to the components vector
+  read_components(FILE_NAME, components); 
 
+  // print the user guide
   print_user_guide();
 
-  // Your program will now just wait for the user input
-  std::string user_input;
 
+  std::string user_input; // define variable for user input
+
+  // loop until the user chooses to exit the program
   while (true) 
   {
-    // Wait for user input. The program will pause here.
-    print_dash();
-    std::cout << " " << std::endl;
+    /* Aims:
+     - Program "waits" for user input
+     - The possible inputs are given in the guide
+     - Function are:
+      i) Print the user guide 
+      ii) Display the component library (components vector)
+      iii) Display the circuit library (circuits vector)
+      iv) Create a new circuit in the basic way
+          (explained in function)
+      v) Edit a circuit in the basic way
+          (explained in function)
+      vi) Open the complex circuit editor
+          (explained in the function)
+      vii) Exit the program */
+
+    print_dash(); // formatting
+    // print to let user know when in home screen
+
+    /* Wait here until the user inputs something */
+    std::cout << "What would you like to do? (type 'help' for guide)" << std::endl;
     std::cin >> user_input;
 
-    if (user_input == "c") 
+    if (user_input == "create") // if the user inputs "create"
     {
-      print_dash(); // readability
-      std::cout << "CREATING CIRCUIT:" << std::endl;
+      print_dash(); // formatting
+      std::cout << "CREATING CIRCUIT:" << std::endl; // call message
 
       // create a smart pointer to a circuit
       std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
-      // ask user to build circuit with components
-      // create_circuit_old(circuit, components); (old create circtui function)
+      // print component library so user can choose components
+      print_component_library(components);
+      print_dash();
+
+      /* Build the circuit (see function) */
       create_circuit(circuit, components);
 
-      // add circuit to circuit library
-      circuits.push_back(std::move(circuit));  // Move the unique_ptr to the vector
+      // add circuit to circuits vector
+      circuits.push_back(std::move(circuit));
+
+      return_statement(); // let user know returning to home
     } 
 
-    else if(user_input == "h")
+    else if(user_input == "help") // if user inputs "help"
     {
-      print_user_guide();
+      print_user_guide(); // print the user guide
     }
 
-    else if(user_input == "g") // if user inputs g
+    else if(user_input == "components") // if user inputs "components"
     {
-      print_component_library(components); // print the library
+      // print the vector of components
+      print_component_library(components);
     }
 
-    else if(user_input == "x") 
+    else if(user_input == "exit") // if the user inputs "exit"
     {
-        // If 'e' is entered, exit the program
-        std::cout << "Exiting program." << std::endl;
-        break;  // Exit the loop and terminate the program
+        std::cout << "Exiting program." << std::endl; // call message
+        break;  // break the loop
     } 
 
-    else if(user_input == "e")
+    else if(user_input == "edit") // if the user inputs "edit"
     {
+      // print the vector of circuits so user can choose which to edit
       print_circuit_library(circuits);
-      print_dash();
+
+      print_dash(); // formatting
+
+      // allow the user to add more components to circuit of choice
       edit_circuit(components, circuits);
+
+      return_statement(); // let user know returning to home
     }
 
-    else if(user_input == "q")
+    else if(user_input == "circuits") // if user inputs "circuits"
     {
+      // print the vector of circuits
       print_circuit_library(circuits);
     }
 
-    else if(user_input == "k")
+    else if(user_input == "editor") // if user inputs "open editor"
     {
       print_dash(); // formatting
+
       std::cout << "OPENING CIRCUIT EDITOR" << std::endl; // call message
 
       std::string input; // define variable for user input
@@ -663,21 +690,23 @@ int main() {
           std::cout << "Invalid option." << std::endl;
         }
       }
+      return_statement(); // lets user know returning to home
     }
 
-    else 
+    else // if the user input is not of the right form
     {
-      // If input is not 'c' or 'e', you can handle it here.
-      std::cin.clear();  // clear a failed state
+      std::cin.clear();  // clear the failed state
+
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-      std::cout << "Invalid option. Refer to the user guide (h)" << std::endl;
+
+      // print error message
+      std::cout << "Invalid option. Refer to the user guide." << std::endl;
     }
   }
 
   print_dash(); // for readability
 
-  return 0;
-
+  return 0; // end of program
 }
 
 

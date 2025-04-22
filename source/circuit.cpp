@@ -265,7 +265,7 @@ void Circuit::print_data() const
   iv) connection matrix
   v) the vector of components */
 
-  std::cout << "\nCIRCUIT DATA:\n"
+  std::cout << "CIRCUIT DATA:\n"
             << " # Impedance Magnitude: " 
             <<  std::abs(impedance) << " Ohms" 
             << "\n # Phase Shift: " 
@@ -273,36 +273,33 @@ void Circuit::print_data() const
             << "\n # Memory Location: " << this << std::endl;
 
   /* Print the connection matrix */
-  std::cout << "\nCONNECTION MATRIX:\n\n  ";
+  std::cout << " # Connection Matrix:";
 
   for (const auto& row : connection_matrix) // for each row
   { 
+    // Move to the next line after printing a row
+    std::cout << "\n    "; 
 
     for (const auto& value : row) // for each element in the row
     {
       // Print the value and a space
       std::cout << value << " ";
     }
-    
-    // Move to the next line after printing a row
-    std::cout << "\n  "; 
   }
   
   /* Print the vector of components */
-  std::cout << "\nCONNECTION MATRIX COMPONENTS:\n\n";
+  std::cout << "\n # Connection Matrix Components:\n";
 
   int counter = 1; // counter to label index of each component
 
   for (const std::shared_ptr<Component>& component : added_components) 
   {
     // print which component is which index
-    std::cout << "Index " << counter << ") " 
+    std::cout << "   # Column/Row " << counter << " = " 
               << component->get_name() << std::endl; 
 
     counter += 1; // next index
   }
-
-  print_vspace(); // formatting
 }
 
 
