@@ -17,19 +17,16 @@ std::string FILE_NAME = "input_components.csv"; // defining the input file name
 double FREQUENCY = 50.0; // frequency of AC circuit in Hz (change accordingly)
 
 
-void error_message() {
-    
-  //prints an error message if an input is of the wrong form
-  std::cin.clear();  // clear a failed state
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-  std::cout << "Invalid input. Please try again" << std::endl;
-}
-
-
 void print_user_guide() 
 {
-  print_dash(); // to separate from above outputs
+    /* Output table with two columns:
+  i) First Column is the command (typed)
+  ii) Second Column is the descruption
+  Covers all main functionality */
 
+  print_dash(); // to separate from previous outputs
+
+  // outputting main table
   std::cout << "Command\t\tDescription" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
   std::cout << "help\t\tDisplay user guide" << std::endl;
@@ -45,8 +42,8 @@ void print_user_guide()
 void read_components(const std::string& filename, std::vector<std::shared_ptr<Component>>& components)
 {  
   /* Parameters: 
-   - components (vector of smart pointers to arbitrary components)
-   - filename (string) (kept abitrary so can use for different files)
+   - components (vector of smart pointers components) - to store the components
+   - filename (string) - kept abitrary so can use for different files
   Aims:
    - reads file line by line
    - determines which component each line is
@@ -56,19 +53,19 @@ void read_components(const std::string& filename, std::vector<std::shared_ptr<Co
   std::string line; // defining a string which holds each line whilst reading
 
   print_dash(); // for readability
-  std::cout << "\nGENERATING COMPONENTS:" << std::endl;
+  std::cout << "\nGENERATING COMPONENTS:" << std::endl; // call message
 
   while (std::getline(file, line)) { // Whilst lines remain
 
-      std::stringstream ss(line); // make stringstream of current line
+      std::stringstream ss(line); // making stringstream of current line
       std::string type, name; // deinfing variables to store type, name, frequency and value (e.g. resistance)
       double value;
 
       std::getline(ss, type, ','); // read up to first comma, this is type
-      std::getline(ss, name, ','); // read up to nect comma, this is name
+      std::getline(ss, name, ','); // read up to next comma, this is name
       ss >> value; // extract the numeric value, this is value
 
-      // Create smart pointers and add to vector
+      /* Create smart pointers and add to vector */
       if (type == "Resistor") { 
           components.push_back(std::make_shared<Resistor>(name, FREQUENCY, value)); // add resistor
       } else if (type == "Capacitor") {
@@ -84,13 +81,13 @@ void read_components(const std::string& filename, std::vector<std::shared_ptr<Co
 void print_component_library(std::vector<std::shared_ptr<Component>>& components)
 {
   /* Parameters:
-   - components (vector of smart pointers to arbitrary components)
+   - components (vector of smart pointers to components) - stores the components
    Aims:
    - to iterate through the vector
-   - use the print data functions to print each component*/
+   - use the print data functions to print each component */
 
   print_dash(); // for readability
-  std::cout << "\nCOMPONENT LIBRARY:" << std::endl;
+  std::cout << "\nCOMPONENT LIBRARY:" << std::endl; // call message
 
   int counter = 1; // initialising variable to label number of component
 
@@ -98,7 +95,7 @@ void print_component_library(std::vector<std::shared_ptr<Component>>& components
     std::cout << "\n" << counter << ") " 
               << std::endl; // label component number in library
     component->print_data(); // print data of component
-    counter += 1;
+    counter += 1; // add one to label
   }
 
 }
@@ -107,7 +104,7 @@ void print_component_library(std::vector<std::shared_ptr<Component>>& components
 void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits)
 {
   /* Parameters:
-   - components (vector of smart pointers to arbitrary components)
+   - components (vector of smart pointers to components) - stores the components
    Aims:
    - to iterate through the vector
    - use the print data functions to print each component*/
@@ -129,20 +126,35 @@ void print_circuit_library(const std::vector<std::unique_ptr<Circuit>>& circuits
 
 int choose_component(std::vector<std::shared_ptr<Component>>& components)
 {
-  std::string component_choice_str;
-  int component_choice_int = -995; 
+  /* Parameters
+  i) Components (vector of smart pointers) - stores the components 
+  Aims:
+  i) Loop asking the user for input and takes input as a string
+  ii) Tries converting to an integer
+  iii) If fails, prints error and loops again
+  iv) If succeed, checks if integer is in the range of components vector
+  v) If no, prints error and loops again
+  vi) If yes, returns the choice of component (integer index) */
 
-  while(true)
+  std::string component_choice_str; // to store the input as string
+
+  // define random number (will see why later)
+  int component_choice_int = -999; 
+
+  while(true) // whilst user input is invalid
   {
+    // ask user for input
     std::cout << "\nEnter Component Number (1, 2, 3...): " << std::endl;
     std::cin >> component_choice_str;
 
     try 
-    { // try converting the input to an integer
+    { 
+      // try converting input to integer
       component_choice_int = std::stoi(component_choice_str);  
     } 
     catch (const std::invalid_argument& e) 
     {
+      // if can't convert, print error
       std::cout << "Invalid input. Please enter a valid number." << std::endl;
     }
           
@@ -151,32 +163,32 @@ int choose_component(std::vector<std::shared_ptr<Component>>& components)
 
     if(component_choice_int - 1 >= size) // check if right size
     {
-      std::cin.clear();  // clear a failed state
+      std::cin.clear();  // clear the failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-      std::cout << "Input too high."
+      std::cout << "Input too high." // error message
                  << " Please choose integer in library" << std::endl;
     } 
     
-    else if(component_choice_int <= 0 && component_choice_int != -995)
+    else if(component_choice_int <= 0 && component_choice_int != -999) // check if right size
     {
-      std::cin.clear();  // clear a failed state
+      std::cin.clear();  // clear the failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-      std::cout << "Input too low."
-      << " Please choose integer in library" << std::endl;
+      std::cout << "Input too low." // error message
+      << " Please choose integer in library" << std::endl; 
     }
 
-    else if(component_choice_int == -995) // will be this if the input wasnt integer
+    else if(component_choice_int > 0 && component_choice_int < size + 1)
     {
-      // do nothing (already printed error)
+      break; // exit the loop as choice in the right range
     }
 
     else
     {
-      break;
+      // print nothing
     }
   }
 
-  return component_choice_int;
+  return component_choice_int; // return the choice of component
 }
 
 
@@ -269,46 +281,71 @@ void add_component(std::unique_ptr<Circuit>& circuit, std::shared_ptr<Component>
 
 void create_circuit(std::unique_ptr<Circuit>& circuit, std::vector<std::shared_ptr<Component>>& components) 
 {
-  int component_index = choose_component(components);
+  /* Parameters:
+  i) Circuit (unique pointer) - circuit being created
+  ii) Components (vector of smart pointers) - list of possible components
+  Aims:
+  i) Prints component library
+  ii) User must input first component using component nums from library
+     - This is added in series (must be)
+  iii) Asks whether user would like to add another
+  iv) If so, asks to choose the component and series or parallel
+  v) Adds accordingly and repeats until user choose not to add any more */
+
+  // get user input for choice of first component
+  int component_index = choose_component(components); 
+
+  // add the first component in series
   circuit->add_series(components[component_index-1]);
 
+  // define a string to store users choice whether to add another component
   std::string add_another;
 
-  while (true) 
+  while (true) // whilst the user is choosing to add more components
   {
-    // Wait for user input. The program will pause here.
+    // Ask the user to choose
     std::cout << "\nAdd another? (y/n) ";
     std::cin >> add_another;
 
-    if (add_another == "y") 
+    if (add_another == "y") // if choose to add another
     {
+      // ask which component to add and if series or parallel
       component_index = choose_component(components);
+
+      // add that component in series or parallel
       add_component(circuit, components[component_index-1]);
     } 
 
-    else if (add_another == "n") 
+    else if (add_another == "n") // if choose not to add another
     {
-      print_vspace();
-      break;  // Exit the loop and terminate the program
+      print_vspace(); // formatting
+
+      break;  // Exit the loop
     } 
 
-    else 
+    else // if input is not valid
     {
-        // If input is not 'c' or 'e', you can handle it here.
-        std::cin.clear();  // clear a failed state
+        std::cin.clear();  // clear the failed state
+
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-        std::cout << "Invalid input." << std::endl;
+
+        std::cout << "Invalid input." << std::endl; // print error message
     }
   }
 
   circuit->print_data(); // print the circuit information once created
-
 }
 
 
 int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
 {
-  std::string circuit_choice_str;
+  /* Parameters:
+  i) Circuits (vector of smart pointers) - list of created circuits
+  Aims:
+  i) To take user input for which circuit they would like to choose */
+
+  // define a string to store users choice of circuit
+  std::string circuit_choice_str; 
   int circuit_choice_int = -995; 
 
   while(true)
@@ -368,7 +405,7 @@ void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vect
     return;
   }
 
-  std::cout << "Which circuit would you like to edit? (see library)" << std::endl;
+  std::cout << "Which circuit would you like to edit? (see library: 1, 2, 3...)" << std::endl;
   int circuit_index = choose_circuit(circuits);
   std::string add_another;
   print_component_library(components);
@@ -573,7 +610,8 @@ int main() {
     print_dash(); // formatting
     // print to let user know when in home screen
 
-    /* Wait here until the user inputs something */
+    /* Wait here until the user inputs something
+    Prompts the user that they need to input to proceed */
     std::cout << "What would you like to do? (type 'help' for guide)" << std::endl;
     std::cin >> user_input;
 
@@ -587,7 +625,7 @@ int main() {
 
       // print component library so user can choose components
       print_component_library(components);
-      print_dash();
+      print_dash(); // formatting
 
       /* Build the circuit (see function) */
       create_circuit(circuit, components);
@@ -642,15 +680,18 @@ int main() {
 
       std::string input; // define variable for user input
 
-      while(true)
+      while(true) // loop until user makes valid choice
       {
+        // ask user whether to create or edit a circuit
         std::cout << "Would you like to create a new circuit"
         << " or edit an existing circuit (c/e)" << std::endl;
         std::cin >> input;
 
         if(input == "c" || input == "C") // if choose to create new circuit
         {
-          // create a smart pointer to a circuit
+          /* Lets the user build a new circuit from scratch using the 
+          complex editor*/
+          // create a new smart pointer to a circuit
           std::unique_ptr<Circuit> circuit = std::make_unique<Circuit>();
 
           // open the complex circuit editor
@@ -664,32 +705,45 @@ int main() {
 
         else if(input == "e" || input == "E") // if choose to edit a circuit
         {
+          /* If the circuits vector contains any circuits, user can choose which
+          circuit they edit. If not, tells user they need to make a circuit first */
+
           if(circuits.size() == 0) // check if the circuits vector has any circuits
           {
             std::cout << "No circuits have been created.\n"
                       << "To edit a circuit - you must make one." << std::endl;
-            // if not circuits created, print the message above
+            // if no circuits created, print the message above
           }
           else
           {
-            print_circuit_library(circuits);
+            print_circuit_library(circuits); // print the circuit library
+
             // asks which circuit user would like to edit
             std::cout << "Which circuit would you like to edit? (see library)" << std::endl;
             int circuit_index = choose_circuit(circuits);
 
             // open the complex circuit editor
             complex_circuit_editor(components, circuits[circuit_index - 1]);
+
+            // Note: no need to add the circuit to the library (already stored)
           }
+
           break; // break the loop
         }
-        else 
+
+        else // if user input is not of the right form
         {
-          // If input is not 'c' or 'e', you can handle it here.
-          std::cin.clear();  // clear a failed state
+          std::cin.clear();  // clear the failed state
+
           std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-          std::cout << "Invalid option." << std::endl;
+
+          // print error message
+          std::cout << "Invalid option. Refer to the user guide." << std::endl; 
+
+          complex_circuit_editor_guide(); // print the guide
         }
       }
+
       return_statement(); // lets user know returning to home
     }
 
@@ -701,6 +755,8 @@ int main() {
 
       // print error message
       std::cout << "Invalid option. Refer to the user guide." << std::endl;
+
+      print_user_guide();
     }
   }
 
