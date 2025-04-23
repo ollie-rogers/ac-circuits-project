@@ -346,19 +346,23 @@ int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
 
   // define a string to store users choice of circuit
   std::string circuit_choice_str; 
-  int circuit_choice_int = -995; 
+  int circuit_choice_int = -999; 
 
-  while(true)
+  while(true) // whilst user input is invalid
   {
-    std::cout << "\nEnter Circuit Number: " << std::endl;
+    std::cout << "\nEnter Circuit Number: " << std::endl; // prompt
+
+    // define string to store input
     std::cin >> circuit_choice_str;
 
     try 
-    { // try converting the input to an integer
+    { 
+      // try converting input to integer
       circuit_choice_int = std::stoi(circuit_choice_str);  
     } 
     catch (const std::invalid_argument& e) 
     {
+      // if cant convert, error message
       std::cout << "Invalid input. Please enter a valid number." << std::endl;
     }
           
@@ -367,32 +371,32 @@ int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
 
     if(circuit_choice_int - 1 >= size) // check if right size
     {
-      std::cin.clear();  // clear a failed state
+      std::cin.clear();  // clear the failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
       std::cout << "Input too high."
                  << " Please choose integer in library" << std::endl;
     } 
     
-    else if(circuit_choice_int <= 0 && circuit_choice_int != -995)
+    else if(circuit_choice_int <= 0 && circuit_choice_int != -999) // check if right size
     {
-      std::cin.clear();  // clear a failed state
+      std::cin.clear();  // clear the failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
       std::cout << "Input too low."
       << " Please choose integer in library" << std::endl;
     }
 
-    else if(circuit_choice_int == -995) // will be this if the input wasnt integer
+    else if(circuit_choice_int > 0 && circuit_choice_int < size + 1) // will be this if the input wasnt integer
     {
-      // do nothing (already printed error)
+      break; // if in the right range, break loop
     }
 
     else
     {
-      break;
+      // do nothing and loop again
     }
   }
 
-  return circuit_choice_int;
+  return circuit_choice_int; // return the choice of circuit
 }
 
 
