@@ -21,8 +21,8 @@ void print_user_guide()
 {
     /* Output table with two columns:
   i) First Column is the command (typed)
-  ii) Second Column is the descruption
-  Covers all main functionality */
+  ii) Second Column is the description
+  Covers all main functionality of 'homepage' */
 
   print_dash(); // to separate from previous outputs
 
@@ -194,24 +194,41 @@ int choose_component(std::vector<std::shared_ptr<Component>>& components)
 
 int choose_remove_component(std::unique_ptr<Circuit>& circuit)
 {
-  std::string component_choice_str;
+    /* Parameters
+  i) Circuit (object) - contains a vector of the added components
+  Aims:
+  i) Loop asking the user for input and takes input as a string
+  ii) Tries converting to an integer
+  iii) If fails, prints error and loops again
+  iv) If succeed, checks if integer is in the range of components vector
+  v) If no, prints error and loops again
+  vi) If yes, returns the choice of component (integer index) */
+
+  std::string component_choice_str; // define string to store input
+
+  // define random number 
   int component_choice_int = -995; 
 
-  while(true)
+  while(true) // whilst user input is invalid
   {
+    // ask for user input
     std::cout << "\nEnter Component Index to Remove: " << std::endl;
     std::cin >> component_choice_str;
 
     try 
-    { // try converting the input to an integer
+    { 
+      // try converting the input to an integer
       component_choice_int = std::stoi(component_choice_str);  
     } 
     catch (const std::invalid_argument& e) 
     {
+      // if cant convert, print error message
       std::cout << "Invalid input. Please enter a valid number." << std::endl;
     }
     
+    // use getter to get the vector of added components
     std::vector<std::shared_ptr<Component>> added_components = circuit->get_added_components();
+
     // store size of library vector as size to check if integer input in range
     int size = static_cast<int>(added_components.size()); // make sure its a signed integer
 
@@ -219,60 +236,75 @@ int choose_remove_component(std::unique_ptr<Circuit>& circuit)
     {
       std::cin.clear();  // clear a failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-      std::cout << "Input too high."
+      std::cout << "Input too high." // error message
                  << " Please choose integer in library" << std::endl;
     } 
     
-    else if(component_choice_int <= 0 && component_choice_int != -995)
+    else if(component_choice_int <= 0 && component_choice_int != -995) // check if right size
     {
       std::cin.clear();  // clear a failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-      std::cout << "Input too low."
+      std::cout << "Input too low." // error message
       << " Please choose integer in library" << std::endl;
     }
 
-    else if(component_choice_int == -995) // will be this if the input wasnt integer
+    else if(component_choice_int > 0 && component_choice_int < size + 1) // will be this if the input wasnt integer
     {
-      // do nothing (already printed error)
+      break; // break if in the right range
     }
 
     else
     {
-      break;
+      // do nothing
     }
   }
 
-  return component_choice_int;
+  return component_choice_int; // return the choice
 }
 
 
 void add_component(std::unique_ptr<Circuit>& circuit, std::shared_ptr<Component>& component)
 {
-  std::string choice;
+  /* Parameter:
+  i) circuit (object) - the circuit object being added to
+  ii) component (object) - the component being added to circuit
+  Aims:
+  i) to ask the user whether they would like to add in s/p
+  ii) use the adder functions from circuit class
+   - to add the component accordingly */
 
-  while (true) 
+  std::string choice; // to hold user input for series or parallel
+
+  while (true) // while user input invalid
   {
+    // as whether to add in series or parallel
     std::cout << "Series or Parallel? (s/p) ";
     std::cin >> choice;
 
     if (choice == "s" || choice == "S") 
     {
+      /* if choose series, use the series adder function from the circuit class
+      to add accordingly */
       circuit->add_series(component);
-      break;
+
+      break; // break the loop (valid input)
     } 
 
     else if (choice == "p" || choice == "P") 
     {
+      /* if choose parallel, use the parallel adder function from the circuit
+      class to add accordingly */
       circuit->add_parallel(component);
-      break;  // Exit the loop and terminate the program
+
+      break; // break the loop (valid input)
     } 
 
     else 
     {
-        // If input is not s or p 
+        // If input is not s or p (invalid)
         std::cin.clear();  // clear a failed state
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-        std::cout << "Invalid input" << std::endl; // say its invalid
+        std::cout << "Invalid input" << std::endl; // error message
     }
 
   }
@@ -402,122 +434,180 @@ int choose_circuit(const std::vector<std::unique_ptr<Circuit>>& circuits)
 
 void edit_circuit(std::vector<std::shared_ptr<Component>>& components, std::vector<std::unique_ptr<Circuit>>& circuits)
 {
-  if(circuits.size() == 0)
+  /* Parameters:
+  i) components (vector of smart pointers to components) - stores the components
+  ii) circuits (vector of smart pointers to circuits) - stores the created circuits
+  Aims:
+  i) Print the list of circuits that have been created
+  ii) Ask the user which one they would like to edit
+  iii) Allow the user to add more components in series or parallel */
+
+  if(circuits.size() == 0) 
   {
-    std::cout << "No circuits have been created.\n"
+    // if no circuits have been created
+    std::cout << "No circuits have been created.\n" // error message
               << "To edit a circuit - you must make one." << std::endl;
-    return;
+
+    return; // no circuits to edit so go back to home
   }
 
+  // ask user which circuit to edit
   std::cout << "Which circuit would you like to edit? (see library: 1, 2, 3...)" << std::endl;
+
+  // use the choose circuit function to print list of circuits and get user input
   int circuit_index = choose_circuit(circuits);
-  std::string add_another;
+
+  std::string add_another; // to store choice of whether to add another component
+
+  // print component library so user can see what they want to add
   print_component_library(components);
 
-  while (true) 
+  while (true) // whilst choice of whether to add another is invalid
   {
+    // ask whether to add a component
     std::cout << "\nAdd component? (y/n) ";
     std::cin >> add_another;
+
     int component_index = 0; // define the component index
 
     if (add_another == "y") 
     {
+      /* if choose to add another, choose the components, choose
+      whether series or parallel, add to circuit */
       component_index = choose_component(components);
       add_component(circuits[circuit_index - 1], components[component_index-1]);
     } 
 
     else if (add_another == "n") 
     {
-        print_vspace();
-        break;  // Exit the loop and terminate the program
+      // if choose not to add another, print a space
+      print_vspace();
+
+      break;  // break the loop
     } 
 
     else 
     {
-        // If input is not 'c' or 'e', you can handle it here.
-        std::cin.clear();  // clear a failed state
+        // If input is invalid
+        std::cin.clear();  // clear the failed state
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
-        std::cout << "Invalid input." << std::endl;
+        std::cout << "Invalid input." << std::endl; // error message
     }
   }
 
   circuits[circuit_index - 1]->print_data(); // print the circuit information once created
-
 }
 
 
 void complex_circuit_editor_guide()
 {
+  /* Output table with two columns:
+  i) First Column is the command (typed)
+  ii) Second Column is the description
+  Covers all main functionality of the editor */
+
   print_dash(); // to separate from above outputs
 
+  // output main table
   std::cout << "Command\t\tDescription" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
-  std::cout << "h\t\tDisplay circuit editor guide" << std::endl;
-  std::cout << "a\t\tAdd component" << std::endl;
-  std::cout << "r\t\tRemove component" << std::endl;
-  std::cout << "n\t\tAdd nested circuit" << std::endl;
-  std::cout << "i\t\tDisplay current circuit info" << std::endl;
-  std::cout << "g\t\tDisplay component library" << std::endl;
-  std::cout << "x\t\tExit the circuit editor" << std::endl;
+  std::cout << "help\t\tDisplay circuit editor guide" << std::endl;
+  std::cout << "add\t\tAdd component" << std::endl;
+  std::cout << "remove\t\tRemove component" << std::endl;
+  std::cout << "info\t\tDisplay current circuit info" << std::endl;
+  std::cout << "components\tDisplay component library" << std::endl;
+  std::cout << "exit\t\tExit the circuit editor" << std::endl;
 }
 
 
 void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components, std::unique_ptr<Circuit>& circuit) 
 {
+  /* Parameters:
+  i) components (vector of smart pointers to components) - stores the components
+  ii) circuit (smart pointer to circuit object) - circuit to be editted
+  Aims:
+  - Program "waits" for user input
+  - The possible inputs are given in the editor guide
+  - Function are:
+  i) Print the editor guide 
+  ii) Display the component library (components vector)
+  iii) Display the current circuit info
+       (the circuit being editted)
+  iv) Add a component
+  v) Remove a component
+  vi) Exit the editor */
 
+  // print the editor guide to help user
   complex_circuit_editor_guide();
-  // Your program will now just wait for the user input
-  std::string user_input;
-  /* Tnitialise integer to check if adding first component.
+
+  std::string user_input; // to store user input
+
+  /* Initialise integer to check if adding first component.
   If so, we want to add in series (avoid dividing by 0)
   Add 1 every time use add function. */
   int check_if_first_component = 0;
 
   while (true) 
   {
-    // Wait for user input here for user input
-    print_dash(); // formatting
-    std::cout << " " << std::endl; // to allow for an input
-    std::cin >> user_input; // wait for input
+    /* This loop will keep running until the user chooses 
+    to exit the editor. */
 
-    if(user_input == "h") // if choose the help guide
+    print_dash(); // formatting
+
+    // wait here for user input
+    std::cout << "What would you like to do? " 
+              << "(type 'help' for guide)" << std::endl;
+    std::cin >> user_input; 
+
+    if(user_input == "help") // if choose the help guide
     {
       complex_circuit_editor_guide(); // print the help guide
     }
 
-    else if(user_input == "i") // if choose to print circuit info
+    else if(user_input == "info") // if choose to print circuit info
     {
       circuit->print_data(); // print the info of the circuit
     }
 
-    else if(user_input == "x") // if chose to exit the program
+    else if(user_input == "exit") // if chose to exit the program
     {
       break;  // Then break the loop
     } 
 
-    else if(user_input == "g") // if choose to display component library
+    else if(user_input == "components") // if choose to display component library
     {
       // display the component library
       print_component_library(components);
     }
 
-    else if(user_input == "r")
+    else if(user_input == "remove") 
     {
+      /* If choose to remove a component
+      - First get the vector of added components from the circuit object
+      - Next, check if there are any components added
+        - If no components in circuit, print error message
+      - If circuit has components, ask which to remove
+      - Recalculate the impedance of the circuit
+      - Update the connection matrix and added components vector */
+
+      // use getter to get vector of added components
       std::vector<std::shared_ptr<Component>> added_components = circuit->get_added_components();
-      int num_of_components = added_components.size();
+
+      int num_of_components = added_components.size(); // get num added
 
       if (num_of_components > 0)
       {
+        // if some components have been added
+
         circuit->print_data(); // print the current circuit info
 
         // take user input for which component to remove
         int remove_component_index = choose_remove_component(circuit);
 
-        // print the choice to check
-        std::cout << "Choice: " << remove_component_index << std::endl;
-
         // use member funtion to remove the component
         circuit->remove_component(remove_component_index);
+
+        // recalculate the impedance
         circuit->calculate_impedance();
 
         // print info for the new circuit
@@ -527,43 +617,49 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
     
       else
       {
+        // if no components in circuit
         std::cout << "Add some components first!" << std::endl;
-        std::cout << "Press i to see the circuit. " 
-                  << "It probably has nothing in it" << std::endl;
+        std::cout << "Press i to see the circuit - " 
+                  << "It probably has nothing in it." << std::endl;
       }
 
     }
 
-    else if(user_input == "a") // if choose to add a component
+    else if(user_input == "add")
     {
+      /* If choose to add a component, add in similar way to
+      add component function */
+
       // ask the user which component they would like to add
       int component_index = choose_component(components);
 
-      /* If this is the first component being added */
       if(check_if_first_component == 0)
       {
-        // then add it in series
+        // if its the first component added, add in series
         circuit->add_series(components[component_index-1]);
-        check_if_first_component += 1;
+
+        check_if_first_component += 1; // add one to the checker
       }      
       else 
-      { // otherwise, ask user how they whether to add in s/p
-      add_component(circuit, components[component_index-1]);
+      { 
+        // otherwise, ask user how they whether to add in s/p
+        // add component accordingly, updating matrix, vector
+        add_component(circuit, components[component_index-1]);
       }
     }
 
     else 
     {
-      // If input is not given by the above
-      std::cin.clear();  // clear a failed state
+      // If input is invalid (not given above)
+      std::cin.clear();  // clear the failed state
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // empty input
 
-      // prompt user to open the menu to help with what to do
+      // prompt user to open the menu to help with what to do (error message)
       std::cout << "Invalid option. Refer to the circuit editor guide (h)" << std::endl;
     }
   }
 
-  circuit->print_data(); // print data when exit
+  circuit->print_data(); // print the data of the created circuit when returning to home
 }
 
 
@@ -572,7 +668,7 @@ void return_statement()
   // prints statement to let user know returning to home
   std::cout << "\nReturning to home." << std::endl; 
 
-  print_user_guide(); // prin the user guide
+  print_user_guide(); // print the user guide
 }
 
 
