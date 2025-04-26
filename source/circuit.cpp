@@ -137,7 +137,6 @@ void Circuit::add_parallel(std::shared_ptr<Component>& component)
   // Resize the matrix to add a new row and column
   size_t new_size = connection_matrix.size() + 1;  // New size for the matrix
  
- 
   // Resize existing rows to add a new column
   for (auto& row : connection_matrix)
   {
@@ -186,7 +185,7 @@ void Circuit::calculate_impedance()
        and in what order
   iv) Add impedances step by step accordingly */
 
-  impedance = 0; // make sure the impedance is initially zero
+  impedance = std::complex<double>(0.0, 0.0); // make sure the impedance is initially zero
   int index = 0; // create an index
 
   std::vector<int> first_row = connection_matrix[0]; // take the first row

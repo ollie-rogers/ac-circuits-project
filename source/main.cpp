@@ -555,7 +555,7 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
     print_dash(); // formatting
 
     // wait here for user input
-    std::cout << "What would you like to do? " 
+    std::cout << "Editor: What would you like to do? " 
               << "(type 'help' for guide)" << std::endl;
     std::cin >> user_input; 
 
@@ -672,7 +672,8 @@ void return_statement()
 }
 
 
-int main() {
+int main() 
+{
 
   /* Create a vector of smart pointers to store the components */
   std::vector<std::shared_ptr<Component>> components;
@@ -712,7 +713,7 @@ int main() {
 
     /* Wait here until the user inputs something
     Prompts the user that they need to input to proceed */
-    std::cout << "What would you like to do? (type 'help' for guide)" << std::endl;
+    std::cout << "Home: What would you like to do? (type 'help' for guide)" << std::endl;
     std::cin >> user_input;
 
     if (user_input == "create") // if the user inputs "create"
@@ -864,10 +865,3 @@ int main() {
 
   return 0; // end of program
 }
-
-
-
-
-
-
-
