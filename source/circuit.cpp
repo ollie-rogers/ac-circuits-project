@@ -152,18 +152,18 @@ void Circuit::add_parallel(std::shared_ptr<Component>& component)
   // Define a counter for the columns
   int j_counter = 0;
   
-  while(j_counter < column_row_index) // whilst the counter is less than length of a column
+  while(j_counter < column_row_index) // Fill column with 2s
   {
-    connection_matrix[column_row_index][j_counter] = 2; // set the element to 1 for series
+    connection_matrix[column_row_index][j_counter] = 2; // set the element to 2 for parallel
     j_counter += 1; // go to the next element in column
   }
   
   // Define a counter for the rows
   int i_counter = 0;
   
-  while(i_counter < column_row_index) // whilst the counter is less than length of a row
+  while(i_counter < column_row_index) // Fill row with 2s
   {
-    connection_matrix[i_counter][column_row_index] = 2; // set the element to 1 for series
+    connection_matrix[i_counter][column_row_index] = 2; // set the element to 2 for parallel
     i_counter += 1; // go to next element in the row
   }
   
@@ -215,6 +215,7 @@ void Circuit::calculate_impedance()
       // Convert Reciprocal to impedance
       impedance = one/reciprocal;
     }
+
     else if(connection_type == 1) // if added in series, update impedance
     {
       // First, use getter to get impedance of added component
@@ -223,10 +224,11 @@ void Circuit::calculate_impedance()
       // add it to the original impedance
       impedance += component_impedance; // modifies impedance
     }
-    else
+
+    else // no connection, dont modify impedance
     {
-      // no connection, dont modify impedance
     }
+
     index += 1; // go to the next component
   }
 }
