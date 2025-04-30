@@ -186,6 +186,13 @@ void Circuit::calculate_impedance()
   iv) Add impedances step by step accordingly */
 
   impedance = std::complex<double>(0.0, 0.0); // make sure the impedance is initially zero
+
+  if(added_components.empty())
+  {
+    return;
+  }
+
+
   int index = 0; // create an index
 
   std::vector<int> first_row = connection_matrix[0]; // take the first row
