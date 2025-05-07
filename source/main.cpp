@@ -619,7 +619,7 @@ void complex_circuit_editor(std::vector<std::shared_ptr<Component>>& components,
       {
         // if no components in circuit
         std::cout << "Add some components first!" << std::endl;
-        std::cout << "Press i to see the circuit - " 
+        std::cout << "Type 'info' to see the circuit - " 
                   << "It probably has nothing in it." << std::endl;
       }
 
