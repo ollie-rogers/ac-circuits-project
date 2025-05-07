@@ -5,3 +5,7 @@ mingw32-make
 TO RUN THE CODE PLEASE ENTER
 
 .\main.exe
+
+EVIDENCE:
+
+![Compiling Evidence](images/compiling_evidence.jpg)
