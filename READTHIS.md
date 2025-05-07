@@ -1,4 +1,4 @@
-TO COMPILE THE CODE PLEASE ENTER (using makefile):
+TO COMPILE THE CODE  (using makefile) PLEASE ENTER:
 
 mingw32-make
 
