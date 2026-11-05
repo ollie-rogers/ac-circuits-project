@@ -46,11 +46,27 @@ Instructions for using the application can be found in the accompanying project 
 
 The application also contains built-in user guides for both the Home and Editor menus, accessible through dedicated guide functions implemented within the source code.
 
-## Build Evidence
+## Example Usage
 
-The project was successfully compiled and executed using MinGW on a university lab workstation.
+The screenshots below demonstrate the creation and modification of AC circuits through the console interface.
 
-![Compilation Evidence](images/compiling_evidence.jpg)
+### Creating a Circuit
+
+<img src="images/basic_terminal.png" width="700">
+
+*Initial application workflow showing the process of creating a new AC circuit and navigating the simulator interface.*
+
+### Adding Components
+
+<img src="images/terminal_snippet_2.png" width="700">
+
+*Example demonstrating the addition of multiple circuit components and the construction of more complex series and parallel circuit configurations.*
+
+### Removing Components
+
+<img src="images/terminal_snippet_3.png" width="700">
+
+*Example demonstrating the removal of an existing component and the automatic recalculation of circuit properties.*
 
 ## Skills Demonstrated
 
@@ -60,3 +76,7 @@ The project was successfully compiled and executed using MinGW on a university l
 - Mathematical Modelling
 - Problem Solving
 - Scientific Computing
+
+## Project Context
+
+This project was developed as part of a third-year university module in Object-Oriented Programming using C++. The objective was to apply object-oriented design principles to create a maintainable and extensible simulation of AC electrical circuits.
